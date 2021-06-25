@@ -12,13 +12,15 @@ class Match {
     constructor(p1, p2) {
         this.player1 = p1;
         this.player2 = p2;
+        this.updateView();
     };
 
     updateView() {
-        for (i = 0; i < 6; i++) {
-            dice = document.getElementsByClassName("die");
+        let dice = document.getElementsByClassName("die");
+        for (let i = 0; i < 6; i++) {
+
             dice[i].innerHTML = this.player1.hand[i + 1];
-            dice[5 + i].innerHTML = this.player2.hand[i + 1];
+            dice[6 + i].innerHTML = this.player2.hand[i + 1];
         };
     };
 
@@ -26,27 +28,27 @@ class Match {
 
 // player for AI and user
 class Player {
-    constructor(name) {
-        this.name = name;
+    constructor() {
         this.hand = []; // numbers 1-6 
         this.bankedDie = []; // bool
-        this.setHand();
         this.score = 0;
+        this.setHand();
     };
 
     //populate initial hand
     setHand() {
-        for (i = 1; i < 7; i++) {
+        for (let i = 1; i < 7; i++) {
             this.hand[i] = getDie(i);
             this.bankedDie[i] = false;
-        };
+            console.log("hand: " + this.hand[i]);
+        }
     };
 
     //reroll on non banked die
     reRoll() {
         for (i = 1; i < 7; i++) {
             if (this.bankedDie[i] == false) {
-
+                // not yet implemented
             };
         };
     };
@@ -95,8 +97,9 @@ function getDie(position) {
 $(document).ready(function() {
     console.log("hello world");
     //setUp();
-    const p1 = new Player("user");
-    const p2 = new Player("computer");
-    const thisMatch = new Match(p1, p2);
+    p1 = new Player();
+    p2 = new Player();
+    thisMatch = new Match(p1, p2);
+    thisMatch.updateView();
 
 });
