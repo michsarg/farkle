@@ -9,97 +9,107 @@
 
 // match for running game
 class Match {
-    constructor(p1, p2) {
-        this.player1 = p1;
-        this.player2 = p2;
+    constructor(user, opponent) {
+        this.user = user;
+        this.opponent = opponent;
         this.updateView();
     };
 
     updateView() {
-        let dice = document.getElementsByClassName("die");
-        for (let i = 0; i < 6; i++) {
+        let userDice = document.getElementById("userHand");
+        let opponentDice = document.getElementById("opponentHand");
+        let diceU = userDice.getElementsByClassName("die");
+        console.log("diceU: " + diceU);
+        let diceO = opponentDice.getElementsByClassName("die");
 
-            dice[i].innerHTML = this.player1.hand[i + 1];
-            dice[6 + i].innerHTML = this.player2.hand[i + 1];
+        for (let i = 0; i < 6; i++) {
+            // representation of dice in html
+            diceU[i].innerHTML = this.user.hand[i];
+            diceO[i].innerHTML = this.opponent.hand[i];
         };
+    };
+
+    //roll die button
+    rollDie() {
+        thisMatch.player.reRoll();
     };
 
 };
 
 // player for AI and user
 class Player {
+
     constructor() {
-        this.hand = []; // numbers 1-6 
-        this.bankedDie = []; // bool
+        this.hand = []; // numbers
+        this.bankedDie = []; // bools
         this.score = 0;
         this.setHand();
     };
 
     //populate initial hand
     setHand() {
-        for (let i = 1; i < 7; i++) {
+        for (let i = 0; i < 6; i++) {
             this.hand[i] = getDie(i);
             this.bankedDie[i] = false;
-            console.log("hand: " + this.hand[i]);
         }
+        console.log("this.hand= " + this.hand);
     };
 
-    //reroll on non banked die
+    // selects random numbers for this players non-banked die
     reRoll() {
-        for (i = 1; i < 7; i++) {
-            if (this.bankedDie[i] == false) {
-                // not yet implemented
+        console.log("(this).bankedDie) = " + (this).bankedDie);
+        for (let i = 0; i < 6; i++) {
+            if ((this).bankedDie[i] == false) {
+                (this).hand[i] = getDie(i);
             };
         };
+        thisMatch.updateView();
     };
 
+    test() {
+        alert("test");
+    }
 
 };
 
-
-
-
-
-
-// get die
+// Returns a random value between 1 and 6
 function getDie(position) {
-
     let numb = Math.random();
     let rand = (numb * 10) % 5;
     rand = Math.round(rand) + 1;
-
-    // alternate code to prevent sucessive duplication
-    // let dice = document.getElementsByClassName("die");
-    // console.log("position=" + position);
-    // if (position > 0) {
-    //     if (rand == dice[(position - 1)].innerHTML) {
-    //         console.log("sequence detected");
-    //         rand = getDie(position);
-    //     }
-    // }
-    //console.log(rand);
-
     return rand;
-
 };
 
-// set up initial dice
-// function setUp() {
-
-//     // html version
-//     let dice = document.getElementsByClassName("die");
-//     for (i = 0; i < dice.length; i++) {
-//         dice[i].innerHTML = getDie(i);
-//     };
-
-// };
-
 $(document).ready(function() {
-    console.log("hello world");
+
     //setUp();
-    p1 = new Player();
-    p2 = new Player();
-    thisMatch = new Match(p1, p2);
+    user = new Player();
+    opponent = new Player();
+    thisMatch = new Match(user, opponent);
     thisMatch.updateView();
+
+    // reroll method
+    $("#rollDie").click(function() {
+        user.reRoll();
+    });
+
+    //click to select User dice
+    $(".die").click(function() {
+        // exit if opponent die clicked
+        if ((this).parentElement.id == "opponentHand") {
+            console.log("wrong dice set clicked");
+            return;
+        }
+
+        // update class of clicked die
+        (this).classList.toggle("banked");
+        // update data structure of banked Die
+        let userDice = document.getElementById("userHand");
+        let dice = userDice.getElementsByClassName("die");
+        let pos = jQuery.inArray((this), dice);
+        console.log("this pos = " + pos);
+        user.bankedDie[pos] = !user.bankedDie[pos];
+        console.log("user.bankedDie[pos]: " + user.bankedDie[pos]);
+    });
 
 });
