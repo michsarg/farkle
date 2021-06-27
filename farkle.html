@@ -5,38 +5,54 @@
     <title>Examples</title>
     <link href="farkle.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/7c049537f0.js" crossorigin="anonymous"></script>
 
 </head>
 <body>
 
     <div id="container">
-
-            <div id="opponentHand">
-            opponentHand
-            <span class="die"></span>
-            <span class="die"></span>
-            <span class="die"></span>
-            <span class="die"></span>
-            <span class="die"></span>
-            <span class="die"></span>
-        </div>
-
-        <div id="userHand">
-            userHand
-            <span class="die"></span>
-            <span class="die"></span>
-            <span class="die"></span>
-            <span class="die"></span>
-            <span class="die"></span>
-            <span class="die"></span>
-        </div> 
-
-        <div id="menu">
-            <button id="rollDie">Roll Dice</button>    
-            <button id="testButton">Confirm</button>
-            <button id="testButton">Pass</button>        
-        </div>
-
+        <table width=100%>
+            <tr>
+                <th colspan="3">farkle</th>
+            </tr>
+            <tr>
+                <td>opponent</td>
+                <td>
+                    <div id="opponentHand">
+                        <span class="die notBanked"></span>
+                        <span class="die notBanked"></span>
+                        <span class="die notBanked"></span>
+                        <span class="die notBanked"></span>
+                        <span class="die notBanked"></span>
+                        <span class="die notBanked"></span>
+                    </div>
+                </td>
+                <td>score:<span id="opponentScore"></span></td>
+            </tr>
+            <tr>
+                <td>user</td>
+                <td>
+                    <div id="userHand">
+                        <span class="die notBanked"></span>
+                        <span class="die notBanked"></span>
+                        <span class="die notBanked"></span>
+                        <span class="die notBanked"></span>
+                        <span class="die notBanked"></span>
+                        <span class="die notBanked"></span>
+                    </div> 
+                </td>
+                <td>score:<span id="userScore"></span></td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div id="menu">
+                        <button id="rollDie">Roll Dice</button>    
+                        <button id="scoreDie">Score</button>
+                        <button id="testButton">Pass</button>        
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
 
     <!--javascript-->

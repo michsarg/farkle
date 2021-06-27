@@ -8,21 +8,42 @@
  */
 
 #container {
-    width: 300px;
+    width: 400px;
     margin: auto;
-    background-color: beige;
+    background-color: silver;
     padding: 5px;
 }
 
 .hand {
-    padding: 5px;
+    padding: 0px;
 }
 
 #menu {
     padding: 5px;
     position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .banked {
-    color: red;
+    color: palegoldenrod;
 }
+
+.notBanked {
+    color: linen;
+}
+
+.die {
+    font-size: 48px;
+}
+
+.iconBg {
+    color: black;
+}
+
+
+/* span>i {
+    font-size: 36px;
+} */
