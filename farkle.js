@@ -5,130 +5,62 @@
  * @version 1.0.0
  */
 
-// match for running game
-class Match {
-    constructor(user, opponent) {
-        this.user = user;
-        this.opponent = opponent;
-        this.userScore = 0;
-        this.opponentScore = 0;
-        this.updateView();
-    };
-
-    updateView() {
-        console.log("update View called");
-
-        // get hands of players
-        let userDice = document.getElementById("userHand");
-        let opponentDice = document.getElementById("opponentHand");
-        let diceU = userDice.getElementsByClassName("die");
-        let diceO = opponentDice.getElementsByClassName("die");
-
-        for (let i = 0; i < 6; i++) {
-            // representation of dice in html
-            diceU[i].innerHTML = this.user.hand[i];
-            diceO[i].innerHTML = this.opponent.hand[i];
-        };
-
-        // update with dice images
-        let allDice = document.getElementsByClassName("die");
-        for (let i = 0; i < allDice.length; i++) {
-            //alert("for looped");
-            if (allDice[i].innerHTML == 1) {
-                var diceValue = document.createElement("i");
-                diceValue.classList.add("fas", "fa-dice-one");
-                allDice[i].innerHTML = "";
-                allDice[i].appendChild(diceValue);
 
 
-                // var iconSpan = document.createElement("span");
-                // iconSpan.classList.add("fa-stack", "fa-1x");
-                // var bgIcon = document.createElement("i");
-                // bgIcon.classList.add("fas", "fa-square", "fa-stack-1x", "iconBg");
-                // var frontIcon = document.createElement("i");
-                // frontIcon.classList.add("fas", "fa-dice-one", "fa-stack-1x");
-                // allDice[i].innerHTML = "";
-                // allDice[i].appendChild(iconSpan);
-                // iconSpan.appendChild(bgIcon);
-                // iconSpan.appendChild(frontIcon);
+// VARIABLES
+p1Score = 0; // formerly userScore
+p2Score = 0; // formerly opponentScore
+activeHand = [1, 1, 1, 1, 1, 1];
+selectedDie = [false, false, false, false, false, false];
+roll();
 
-            } else if (allDice[i].innerHTML == 2) {
-                var diceValue = document.createElement("i");
-                diceValue.classList.add("fas", "fa-dice-two");
-                allDice[i].innerHTML = "";
-                allDice[i].appendChild(diceValue);
-            } else if (allDice[i].innerHTML == 3) {
-                var diceValue = document.createElement("i");
-                diceValue.classList.add("fas", "fa-dice-three");
-                allDice[i].innerHTML = "";
-                allDice[i].appendChild(diceValue);
-            } else if (allDice[i].innerHTML == 4) {
-                var diceValue = document.createElement("i");
-                diceValue.classList.add("fas", "fa-dice-four");
-                allDice[i].innerHTML = "";
-                allDice[i].appendChild(diceValue);
-            } else if (allDice[i].innerHTML == 5) {
-                var diceValue = document.createElement("i");
-                diceValue.classList.add("fas", "fa-dice-five");
-                allDice[i].innerHTML = "";
-                allDice[i].appendChild(diceValue);
-            } else if (allDice[i].innerHTML == 6) {
-                var diceValue = document.createElement("i");
-                diceValue.classList.add("fas", "fa-dice-six");
-                allDice[i].innerHTML = "";
-                allDice[i].appendChild(diceValue);
-            }
+// FUNCTIONS
+function roll() {
+    console.log("activeHand: " + activeHand);
+    console.log("selectedDie: " + selectedDie);
+    for (let i = 0; i < 6; i++) {
+        if (selectedDie[i] == false) {
+            activeHand[i] = getDie(i);
         }
-
-        // update display of scores
-        document.getElementById("userScore").innerHTML = this.userScore;
-        document.getElementById("opponentScore").innerHTML = this.opponentScore;
-
-
-    };
-
-    //roll die button
-    rollDie() {
-        thisMatch.player.reRoll();
-    };
-
-};
-
-// player for AI and user
-class Player {
-
-    constructor() {
-        this.hand = []; // numbers
-        this.bankedDie = []; // bools
-        this.score = 0;
-        this.setHand();
-    };
-
-    //populate initial hand
-    setHand() {
-        for (let i = 0; i < 6; i++) {
-            this.hand[i] = getDie(i);
-            this.bankedDie[i] = false;
-        }
-        console.log("this.hand= " + this.hand);
-    };
-
-    // selects random numbers for this players non-banked die
-    reRoll() {
-        console.log("(this).bankedDie) = " + (this).bankedDie);
-        for (let i = 0; i < 6; i++) {
-            if ((this).bankedDie[i] == false) {
-                (this).hand[i] = getDie(i);
-            };
-        };
-        thisMatch.updateView();
-        getScore(this.hand);
-    };
-
-    test() {
-        alert("test");
     }
+    updateView();
+    // getScore(this.hand);
+}
 
+// updates webpage with data structure values
+function updateView() {
+    console.log("update View called");
+
+    // updates webpage with dice information
+    let activeDice = document.getElementsByClassName("die");
+    for (let i = 0; i < activeDice.length; i++) {
+        if (activeDice[i].childNodes[0]) {
+            activeDice[i].removeChild(activeDice[i].childNodes[0]);
+        }
+        let diceValue = document.createElement("i");
+        switch (activeHand[i]) {
+            case 1:
+                diceValue.classList.add("fas", "fa-dice-one");
+                break;
+            case 2:
+                diceValue.classList.add("fas", "fa-dice-two");
+                break;
+            case 3:
+                diceValue.classList.add("fas", "fa-dice-three");
+                break;
+            case 4:
+                diceValue.classList.add("fas", "fa-dice-four");
+                break;
+            case 5:
+                diceValue.classList.add("fas", "fa-dice-five");
+                break;
+            case 6:
+                diceValue.classList.add("fas", "fa-dice-six");
+                break;
+        }
+        activeDice[i].appendChild(diceValue);
+    }
+    // update display of scores?
 };
 
 // Returns a random value between 1 and 6
@@ -140,7 +72,7 @@ function getDie(position) {
 };
 
 
-// Returns score of banked die
+// Returns score of selected die
 function getScore(passedHand) {
 
     // deep copy passed hand
@@ -197,57 +129,68 @@ function getScore(passedHand) {
             console.log(dieCount[i] + "x single fives");
         }
     }
-
     console.log("score: " + score);
     return score;
 }
 
+function getSelectedScore() {
+    selectedHand = [];
+    // get only selected values
+    for (let i = 0; i < 6; i++) {
+        if (selectedDie[i] == true) {
+            selectedHand[i] = activeHand[i];
+        }
+    }
+    let score = getScore(selectedHand);
+    return score;
+}
+
+
+// run game
 $(document).ready(function() {
 
-    //setUp();
-    user = new Player();
-    opponent = new Player();
-    thisMatch = new Match(user, opponent);
-    thisMatch.updateView();
+    updateView();
 
-    // reroll method
-    $("#rollDie").click(function() {
-        user.reRoll();
+    // listener for roll button/method
+    $("#scoreRoll").click(function() {
+        roll();
     });
 
-    //Score method
+    // listener for score button/method
     $("#scoreDie").click(function() {
-        bankedHand = [];
-        // get only banked values
+        selectedHand = [];
+        // get only selected values
         for (let i = 0; i < 6; i++) {
-            if (user.bankedDie[i] == true) {
-                bankedHand[i] = user.hand[i];
+            if (selectedDie[i] == true) {
+                selectedHand[i] = activeHand[i];
             }
         }
-        let score = getScore(bankedHand);
-        user.score += score;
+        let score = getScore(selectedHand);
+        p1Score += score;
         console.log("scored as: " + score);
-        thisMatch.updateView();
+        updateView();
     });
 
-    //click to select User dice
+    // listener for dice click/selection
     $(".die").click(function() {
-        // exit if opponent die clicked
-        if ((this).parentElement.id == "opponentHand") {
-            console.log("wrong dice set clicked");
-            return;
-        }
-
         // update class of clicked die
-        (this).classList.toggle("banked");
-        (this).classList.toggle("notBanked");
-        // update data structure of banked Die
-        let userDice = document.getElementById("userHand");
-        let dice = userDice.getElementsByClassName("die");
+        (this).classList.toggle("selected");
+        (this).classList.toggle("notSelected");
+
+        // update data structure of selected Die
+        let dice = document.getElementsByClassName("die");
         let pos = jQuery.inArray((this), dice);
         console.log("this pos = " + pos);
-        user.bankedDie[pos] = !user.bankedDie[pos];
-        console.log("user.bankedDie[pos]: " + user.bankedDie[pos]);
+        selectedDie[pos] = !selectedDie[pos];
+        console.log("selectedDie[pos]: " + selectedDie[pos]);
+
+        //update selected menu value
+        let selectedScore = getSelectedScore();
+        let selected = document.getElementById("p1Selected");
+        selected.innerHTML = "";
+        selected.innerHTML = selectedScore;
+
+
     });
 
 });

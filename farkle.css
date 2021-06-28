@@ -8,42 +8,54 @@
  */
 
 #container {
-    width: 400px;
+    max-width: 500px;
     margin: auto;
     background-color: silver;
-    padding: 5px;
+    padding: 20px;
 }
 
-.hand {
+#heading {
+    font-size: 72px;
+    text-align: center;
+    font-family: 'Germania One', cursive;
     padding: 0px;
 }
 
-#menu {
-    padding: 5px;
+#board {
+    /* background-image: url("board.jpg"); */
+    padding: 20px;
+    margin: auto;
+}
+
+
+/* #menu {
+    padding: 0px;
     position: relative;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+} */
+
+#menuStatus {
+    padding: 10px;
 }
 
-.banked {
+.selected {
     color: palegoldenrod;
 }
 
-.notBanked {
+.notSelected {
     color: linen;
 }
 
 .die {
     font-size: 48px;
+    padding: 20px;
 }
 
-.iconBg {
-    color: black;
+#p1Selected,
+#p1Total,
+#p1Round {
+    float: right;
 }
-
-
-/* span>i {
-    font-size: 36px;
-} */

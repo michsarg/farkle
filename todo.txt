@@ -1,0 +1,6 @@
+TODO
+
+- redesign board
+    - center vertically tiled buttons
+    - only one set of die visible on board at a time
+    - die fall in randomly determined  positions
