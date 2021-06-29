@@ -15,7 +15,6 @@
 }
 
 #heading {
-    font-size: 72px;
     text-align: center;
     font-family: 'Germania One', cursive;
     padding: 0px;
@@ -49,6 +48,10 @@
     color: linen;
 }
 
+.banked {
+    color: gray;
+}
+
 .die {
     font-size: 48px;
     padding: 20px;
@@ -58,4 +61,8 @@
 #p1Total,
 #p1Round {
     float: right;
+}
+
+.bottom {
+    float: bottom;
 }
