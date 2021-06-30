@@ -18,33 +18,42 @@ roll();
 
 // FUNCTIONS
 function roll() {
-    console.log("activeHand: " + activeHand);
-    console.log("selectedDie: " + selectedDie);
+    // console.log("activeHand: " + activeHand);
+    // console.log("selectedDie: " + selectedDie);
+    let bustCheckHand = [];
     for (let i = 0; i < 6; i++) {
         if (selectedDie[i] == false && bankedDie[i] == false) {
             activeHand[i] = getDie(i);
+            bustCheckHand.push(activeHand[i]);
         }
     }
     updateView();
-    // check for bust
-}
-
-function bustCheck() {
-
-    dice = document.getElementsByClassName("die");
-    for (let i = 0; i < 6; i++) {
+    // check for bust or
+    // repeat play if all dice used
+    if (bustCheckHand.length > 0) {
+        bustCheck(bustCheckHand);
+    } else {
+        alert("play again! all dice used");
 
     }
+}
 
-    alert(p1Selected);
-
+// checks passed hand for bust condition
+// and updates game status
+function bustCheck(bustCheckHand) {
+    score = getScore(bustCheckHand);
+    // console.log("bustCheckHand: " + bustCheckHand);
+    // console.log("bustCheck score: " + score);
+    if (0 == score) {
+        alert("bust!");
+    }
 
 }
 
 
 // updates webpage with data structure values
 function updateView() {
-    console.log("update View called");
+    // console.log("update View called");
 
     // updates webpage with dice information
     let activeDice = document.getElementsByClassName("die");
@@ -103,7 +112,7 @@ function getScore(passedHand) {
             //break;
         }
     }
-    console.log("dieCount: " + dieCount);
+    // console.log("dieCount: " + dieCount);
 
     // full house
     if (inputHand.length == 6) {
@@ -111,7 +120,7 @@ function getScore(passedHand) {
             if (dieCount[i] != 1) { break }
             if (i == 5) {
                 score = 3000;
-                console.log("full house");
+                // console.log("full house");
                 return score;
             }
         }
@@ -122,7 +131,7 @@ function getScore(passedHand) {
         if (dieCount[i] == 2) { pairCount++; }
     }
     if (pairCount == 3) {
-        console.log("3 pairs")
+        // console.log("3 pairs")
         score = 1500;
         return score;
     }
@@ -132,27 +141,34 @@ function getScore(passedHand) {
         if (dieCount[i] >= 3) {
             score += ((i + 1) * 100);
             dieCount[i] -= 3;
-            console.log("triple " + (i + 1));
+            // console.log("triple " + (i + 1));
         }
         // single ones
         else if (i == (1 - 1) && dieCount[i] > 0) {
             score += ((dieCount[i]) * 100);
-            console.log(dieCount[i] + "x single ones");
+            // console.log(dieCount[i] + "x single ones");
             //reset dieCount
             dieCount[i] = 0;
         }
         //single fives
         else if (i == (5 - 1) && dieCount[i] > 0) {
             score += ((dieCount[i]) * 50);
-            console.log(dieCount[i] + "x single fives");
-            // bank selected scoring die
+            // console.log(dieCount[i] + "x single fives");
             //reset dieCount
             dieCount[i] = 0;
         }
     }
+    disableRollOnNonScore(dieCount);
+    // console.log("score: " + score);
+    // console.log(dieCount);
+    return score;
+}
 
-    // html update
-    // Disable options if non-scoring die are selected
+
+
+// Disable roll options if non-scoring die are selected
+function disableRollOnNonScore(dieCount) {
+
     let nonScoreDie = 0;
     for (let i = 0; i < 6; i++) {
         if (dieCount[i] != 0) {
@@ -166,11 +182,8 @@ function getScore(passedHand) {
         document.getElementById("scoreRoll").classList.remove("disabled");
         document.getElementById("scorePass").classList.remove("disabled");
     }
-
-    console.log("score: " + score);
-    console.log(dieCount);
-    return score;
 }
+
 
 function getSelectedScore() {
     selectedHand = [];
@@ -183,6 +196,7 @@ function getSelectedScore() {
     return getScore(selectedHand);
 }
 
+// updates html with score variables
 function updateScoreBoard() {
     document.getElementById("p1Total").innerHTML = p1Total;
     document.getElementById("p1Round").innerHTML = p1Round;
@@ -211,7 +225,7 @@ $(document).ready(function() {
                 dice[i].classList.add("banked");
             }
         }
-        console.log("banked: " + bankedDie);
+        // console.log("banked: " + bankedDie);
         // update scoreboard
         p1Round += p1Selected;
         p1Selected = 0;
@@ -225,7 +239,7 @@ $(document).ready(function() {
     $(".die").click(function() {
         // check die not banked
         if ((this).classList.contains("banked")) {
-            console.log("is this banked? " + (this).classList.contains("banked"))
+            // console.log("is this banked? " + (this).classList.contains("banked"))
             return
         }
 
@@ -236,9 +250,9 @@ $(document).ready(function() {
         // update data structure of selected Die
         let dice = document.getElementsByClassName("die");
         let pos = jQuery.inArray((this), dice);
-        console.log("this pos = " + pos);
+        // console.log("this pos = " + pos);
         selectedDie[pos] = !selectedDie[pos];
-        console.log("selectedDie[pos]: " + selectedDie[pos]);
+        // console.log("selectedDie[pos]: " + selectedDie[pos]);
 
         //update selected menu value
         p1Selected = getSelectedScore();
@@ -252,6 +266,6 @@ $(document).ready(function() {
 function testScore(testHand) {
     let thisHand = testHand;
     let thisScore = getScore(thisHand);
-    console.log("thisScore: " + thisScore);
+    // console.log("thisScore: " + thisScore);
     alert(thisScore);
 }

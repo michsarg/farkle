@@ -14,7 +14,8 @@
     padding: 20px;
 }
 
-#heading {
+#heading,
+#status {
     text-align: center;
     font-family: 'Germania One', cursive;
     padding: 0px;
