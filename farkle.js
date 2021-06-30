@@ -21,6 +21,7 @@ function roll() {
     // console.log("activeHand: " + activeHand);
     // console.log("selectedDie: " + selectedDie);
     let bustCheckHand = [];
+
     for (let i = 0; i < 6; i++) {
         if (selectedDie[i] == false && bankedDie[i] == false) {
             activeHand[i] = getDie(i);
@@ -34,9 +35,23 @@ function roll() {
         bustCheck(bustCheckHand);
     } else {
         alert("play again! all dice used");
-
+        resetActiveHand();
     }
 }
+
+function resetActiveHand() {
+    console.log("resetActiveHand called");
+    dice = document.getElementsByClassName("die");
+    for (let i = 0; i < 6; i++) {
+        activeHand[i] = 0;
+        selectedDie[i] = false;
+        bankedDie[i] = false;
+        dice[i].classList.remove("banked", "selected");
+        dice[i].classList.add("notSelected");
+    }
+    roll();
+}
+
 
 // checks passed hand for bust condition
 // and updates game status
@@ -210,7 +225,7 @@ $(document).ready(function() {
     updateView();
 
     $("#quit").click(function() {
-        bustCheck();
+        resetActiveHand();
     });
 
     // listener for scoreRoll button/method
