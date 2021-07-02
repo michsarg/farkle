@@ -7,38 +7,111 @@
  * @version 1.0.0
  */
 
+@font-face {
+    font-family: 'orotundheavy';
+    src: url('Orotund-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'plainblackwidenormal';
+    src: url('Plain_Black_Wide-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 #container {
     max-width: 500px;
     margin: auto;
-    background-color: silver;
+    margin-top: 20px;
+    /* background-color: silver; */
+    background-image: url("stonewallsponge4.png");
     padding: 20px;
 }
 
-#heading,
-#status {
+#heading {
+    font-size: 48px;
     text-align: center;
-    font-family: 'Germania One', cursive;
+    font-family: 'orotundheavy';
     padding: 0px;
+}
+
+#boardContainer {
+    position: relative;
+    /* height: 450px;
+    width: 450px; */
+    height: 474px;
+    /*background-color: #877d74;*/
+    background-image: url("boardbit.png");
+    border-style: solid;
+    border-width: thick;
+    border-color: #534848;
+    /* padding: 15px; */
+}
+
+#status {
+    position: absolute;
+    /* height: 200px; */
+    width: 100%;
+    height: 66%;
+    padding: 0px;
+    text-align: center;
+    z-index: 2;
+}
+
+#status>p {
+    position: absolute;
+    font-family: 'orotundheavy';
+    font-size: 36px;
+    margin: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
 }
 
 #board {
-    /* background-image: url("board.jpg"); */
-    padding: 20px;
-    margin: auto;
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 66%;
+    z-index: 1;
+    align-items: center;
 }
 
-
-/* #menu {
-    padding: 0px;
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-} */
-
 #menuStatus {
-    padding: 10px;
+    position: absolute;
+    width: 100%;
+    height: auto;
+    bottom: 0px;
+    z-index: 1;
+    padding: 15px;
+}
+
+#playButtons {
+    font-family: 'orotundheavy';
+    /* font-size: 56px; */
+    /* padding: 10px; */
+}
+
+#p1name,
+#p2name {
+    font-family: 'orotundheavy';
+    font-size: 24px;
+    display: table;
+    margin: 0 auto;
+}
+
+#p1table,
+#p2table {
+    /* padding: 10px; */
+    font-family: 'Dosis', sans-serif;
+    font-size: 14px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-top: 5px;
 }
 
 .selected {
@@ -50,20 +123,107 @@
 }
 
 .banked {
-    color: gray;
+    color: silver;
 }
 
 .die {
     font-size: 48px;
-    padding: 20px;
+    padding: 10px;
+    vertical-align: top;
 }
 
 #p1Selected,
 #p1Total,
-#p1Round {
+#p1Round,
+#p2Selected,
+#p2Total,
+#p2Round,
+.goalScore,
+.divider {
     float: right;
 }
 
 .bottom {
-    float: bottom;
+    float: inline-end;
 }
+
+#overlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    cursor: pointer;
+}
+
+
+/* #text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 50px;
+    color: white;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+} */
+
+.trueDie {
+    pointer-events: none;
+}
+
+#p1table {
+    background-image: url(paper1.png);
+}
+
+#p2table {
+    background-image: url(paper2.png);
+}
+
+
+/* div {
+    border: solid;
+} */
+
+.simple-highlight {
+    background-color: rgb(255, 230, 0, 0.4);
+    padding: 0.1em 0.2em;
+}
+
+.d1 {
+    transform: translate(125px, -75px);
+}
+
+.d2 {
+    transform: translate(0px, -100px);
+}
+
+.d3 {
+    transform: translate(50px, 50px);
+}
+
+.d4 {
+    transform: translate(-50px, -25px)
+}
+
+.d5 {
+    transform: translate(-100px, 50px)
+}
+
+.d6 {
+    transform: translate(-175px, -100px)
+}
+
+
+/* .d1b {
+    transform: rotate(45deg);
+} */
+
+
+/* .d2b {
+    transform: rotate(50deg);
+} */
