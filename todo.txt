@@ -1,15 +1,15 @@
 TODO
 
+- interface
+    - start screen / game mode selection
+    - victory screen
+
 - game modes
-    - first design two player game
     - later add option to play against computer
 
 - game rules
-    - need to continue round if whole hand used
-    - need to detect bust automatically
+    - update scoring
 
 - redesign board
-    X center vertically tiled buttons
-    X only one set of die visible on board at a time
-    - die fall in randomly determined  positions
+    - die positions need finalisation
 

@@ -16,15 +16,29 @@
 
     <div id="container">
 
+        <!-- heading -->
         <div class="row" id="heading">
-            <span class="col-12">Kingdom Come Dice</span>
+            <span class="col-12">Kingdom Come: Dice</span>
         </div>
 
+        <!-- title screen overlay-->
+        <div class="row" id="titleScreen">
+            <div class="col-12">
+                <p style="margin: auto;">Select game mode:</p>
+                <div class="d-grid gap-1" id="titleButtons">
+                    <button id="pvc" class="btn btn-light">Player vs Computer</button>
+                    <button id="pvp" class="btn btn-light">Player vs Player</button>
+                </div>
+            </div>
+        </div>
 
 
         <div id="boardContainer" class="row">
             <div class="col-12">
 
+
+
+                <!-- status overlay -->
                 <div class="row">
                     <div class="col" id="status" >
                         <p id="statusmsg">status</p>
@@ -53,8 +67,8 @@
 
                     <div class="col-4">
                         <div class="d-grid gap-1" id="playButtons">
-                            <button id="scoreRoll" class="btn btn-light">score and roll</button>
-                            <button id="scorePass" class="btn btn-light">score and pass</button>
+                            <button id="scoreRoll" class="btn btn-light">score & roll</button>
+                            <button id="scorePass" class="btn btn-light">score & pass</button>
                             <div>
                                 <button id="help" class="btn btn-light btn-block" style="width: 48%; float: left;">help</button>        
                                 <button id="quit" class="btn btn-light btn-block" style="width: 48%; float: right">quit</button>
@@ -75,6 +89,10 @@
         </div>
 
     </div>
+    <span class="fa-stack fa-3x">
+        <i class="far fa-circle fa-stack-2x"></i>
+        <i class="fa fa-dice-three fa-stack-1x"></i>
+    </span>
 
     <!--javascript-->
     <script type="text/javascript" src="farkle.js"></script>

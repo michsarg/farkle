@@ -18,14 +18,19 @@ activeHand = [0, 0, 0, 0, 0, 0];
 selectedDie = [false, false, false, false, false, false];
 bankedDie = [false, false, false, false, false, false];
 turn = "p2";
+winScore = 2000;
+gameMode = "none";
 roll();
 
 // FUNCTIONS
 
-// new random values for non-selected non-banked dice
+// updates data structure with random values 
+// for non-selected non-banked dice
 function roll() {
     // console.log("activeHand: " + activeHand);
     // console.log("selectedDie: " + selectedDie);
+
+    // get new value for valid die & build bustcheck
     let bustCheckHand = [];
     for (let i = 0; i < 6; i++) {
         if (selectedDie[i] == false && bankedDie[i] == false) {
@@ -33,8 +38,9 @@ function roll() {
             bustCheckHand.push(activeHand[i]);
         }
     }
-    rotateDie();
+
     updateView();
+    rotateDie();
     if (bustCheckHand.length > 0) {
         // check for bust; else continue play
         bustCheck(bustCheckHand);
@@ -64,15 +70,13 @@ function resetActiveHand() {
 function updateStatus(message) {
     document.getElementById("statusmsg").innerHTML = message;
     $("#status").show();
-    setTimeout(function() { $("#status").hide() }, 1500);
+    setTimeout(function() { $("#status").hide() }, 1000);
 }
 
 // checks passed hand for bust condition
 // and updates game status
 function bustCheck(bustCheckHand) {
     score = getScore(bustCheckHand);
-    // console.log("bustCheckHand: " + bustCheckHand);
-    // console.log("bustCheck score: " + score);
     if (0 == score) {
         updateStatus("Bust!");
         if (turn == "p1") {
@@ -94,9 +98,11 @@ function bustCheck(bustCheckHand) {
 function rotateDie() {
     dice = document.getElementsByClassName("die");
     for (let i = 0; i < 6; i++) {
-        angle = Math.round((Math.random() * 1000) % 360);
-        $(dice[i].childNodes[0]).css("transform", "rotate(" + angle + "deg)");
-        console.log(dice[i].childNodes[0]);
+        if (dice[i].classList.contains("notSelected")) {
+            angle = Math.round((Math.random() * 1000) % 360);
+            $(dice[i].childNodes[0]).css("transform", "rotate(" + angle + "deg)");
+            console.log(dice[i].childNodes[0]);
+        }
     }
 
 }
@@ -107,6 +113,10 @@ function updateView() {
 
     // updates webpage with dice information
     let activeDice = document.getElementsByClassName("die");
+    // for (let i = 0; i < activeDice.length; i++) {
+    //     $(activeDice[i]).hide();
+    // }
+
     for (let i = 0; i < activeDice.length; i++) {
         if (activeDice[i].childNodes[0]) {
             activeDice[i].removeChild(activeDice[i].childNodes[0]);
@@ -138,6 +148,11 @@ function updateView() {
         activeDice[i].appendChild(diceValue);
     }
     rotateDie();
+    // for (let i = 0; i < activeDice.length; i++) {
+    //     let time = 1000 + (i * 100);
+    //     setTimeout(function() { $(activeDice[i]).show() }, time);
+    // }
+
     updateScoreBoard();
 
 };
@@ -150,7 +165,7 @@ function getDie(position) {
     return rand;
 };
 
-// Returns score of selected die
+// Returns score of hand passed to it
 // called when a die is clicked
 function getScore(passedHand) {
 
@@ -167,58 +182,90 @@ function getScore(passedHand) {
     }
     // console.log("dieCount: " + dieCount);
 
-    // full house
+    // full straight
     if (inputHand.length == 6) {
         for (let i = 0; i < 6; i++) {
             if (dieCount[i] != 1) { break }
             if (i == 5) {
-                score = 3000;
-                // console.log("full house");
+                //disableRollOnNonScore(dieCount);
+                score = 1500;
                 return score;
             }
         }
     }
-    // 3 pairs
-    var pairCount = 0;
-    for (let i = 0; i < dieCount.length; i++) {
-        if (dieCount[i] == 2) { pairCount++; }
-    }
-    if (pairCount == 3) {
-        // console.log("3 pairs")
-        score = 1500;
-        return score;
-    }
-    // triples
-    // doesn't cover multiple triples of same
-    for (let i = 0; i < dieCount.length; i++) {
-        if (dieCount[i] >= 3) {
-            score += ((i + 1) * 100);
-            dieCount[i] -= 3;
-            // console.log("triple " + (i + 1));
+
+    // partial straights
+    if (inputHand.length >= 5) {
+        // partial straight 1-5
+        for (let i = 0; i < 4; i++) {
+            if (dieCount[i] < 1) { break };
+            if (i == 4) { score += 500 };
         }
+        // partial straight 2-6
+        for (let i = 1; i < 6; i++) {
+            if (dieCount[i] < 1) { break };
+            if (i == 5) { score += 750 };
+        }
+    }
+
+    // // 3 pairs
+    // var pairCount = 0;
+    // for (let i = 0; i < dieCount.length; i++) {
+    //     if (dieCount[i] == 2) { pairCount++; }
+    // }
+    // if (pairCount == 3) {
+    //     // console.log("3 pairs")
+    //     score = 1500;
+    //     return score;
+    // }
+
+    for (let i = 0; i < dieCount.length; i++) {
+
+        // more than three of a kind
+        if (dieCount[i] >= 3) {
+            // for 1s
+            if (i == 0) {
+                let subScore = 1000;
+                dieCount[i] -= 3;
+                while (dieCount[i] > 0) {
+                    subScore *= 2;
+                    dieCount[i] -= 1;
+                }
+                score += subScore;
+            }
+            // for 2-6
+            else {
+                let subScore = ((i + 1) * 100);
+                dieCount[i] -= 3;
+                while (dieCount[i] > 0) {
+                    subScore *= 2;
+                    dieCount[i] -= 1;
+                }
+                score += subScore;
+            }
+        }
+
         // single ones
         else if (i == (1 - 1) && dieCount[i] > 0) {
             score += ((dieCount[i]) * 100);
-            // console.log(dieCount[i] + "x single ones");
-            //reset dieCount
             dieCount[i] = 0;
         }
         //single fives
         else if (i == (5 - 1) && dieCount[i] > 0) {
             score += ((dieCount[i]) * 50);
-            // console.log(dieCount[i] + "x single fives");
-            //reset dieCount
             dieCount[i] = 0;
         }
     }
-    disableRollOnNonScore(dieCount);
+    disableRollOnNonScore(dieCount, score);
     // console.log("score: " + score);
     // console.log(dieCount);
     return score;
 }
 
 // Disable roll options if non-scoring die are selected
-function disableRollOnNonScore(dieCount) {
+// PROBELEMO: 0 is used to signify all die counted AND ALSO no scoring die
+// this wont detect situation where all die selected and all are scoring
+function disableRollOnNonScore(dieCount, score) {
 
     let nonScoreDie = 0;
     for (let i = 0; i < 6; i++) {
@@ -226,15 +273,17 @@ function disableRollOnNonScore(dieCount) {
             nonScoreDie++;
         }
     }
+    //is player has selected non-scoring die
     if (nonScoreDie > 0) {
-        document.getElementById("scoreRoll").classList.add("disabled");
-        document.getElementById("scorePass").classList.add("disabled");
+        $("#scoreRoll").addClass("disabled");
+        $("#scorePass").addClass("disabled");
     } else {
-        document.getElementById("scoreRoll").classList.remove("disabled");
-        document.getElementById("scorePass").classList.remove("disabled");
+        $("#scoreRoll").removeClass("disabled");
+        $("#scorePass").removeClass("disabled");
     }
 }
 
+// returns score of selected die only
 function getSelectedScore() {
     selectedHand = [];
     // get only selected values
@@ -254,34 +303,61 @@ function updateScoreBoard() {
     document.getElementById("p2Total").innerHTML = p2Total;
     document.getElementById("p2Round").innerHTML = p2Round;
     document.getElementById("p2Selected").innerHTML = p2Selected;
+    winCheck();
 }
 
+function winCheck() {
+    if (p1Total >= winScore) { alert("Player 1 wins") }
+    if (p2Total >= winScore) { alert("Player 2 wins") }
+    //reset game state
+
+}
+
+
 function progressTurn() {
-    console.log("progress turn called")
-    console.log("prev turn: " + turn);
     if (turn == "p1") {
         turn = "p2";
-        updateStatus("Player 2's turn");
-        //$("#p1name").effect("highlight");
-        $(document.getElementById("p2name").classList.add("simple-highlight"));
-        $(document.getElementById("p1name").classList.remove("simple-highlight"));
+        updateStatus("Player 2");
+        $("#p1name").removeClass("simple-highlight");
+        $("#p2name").addClass("simple-highlight");
     } else {
         turn = "p1"
-        updateStatus("Player 1's turn");
-        $(document.getElementById("p1name").classList.add("simple-highlight"));
-        $(document.getElementById("p2name").classList.remove("simple-highlight"));
+        updateStatus("Player 1");
+        $("#p1name").addClass("simple-highlight");
+        $("#p2name").removeClass("simple-highlight");
     }
-
     resetActiveHand();
+}
+
+
+function startGame(mode) {
+
+    document.getElementById("titleScreen").style.display = "none";
+    document.getElementById("boardContainer").style.display = "block";
+    $(".die").toggle();
+
+    if (mode == "pvc") {
+        updateStatus("player vs computer")
+    } else if (mode == "pvp") {
+        updateStatus("player vs player")
+        console.log("pvc")
+    }
+    //start the game
+    setTimeout(function() { updateStatus("Lets Play!"); }, 2000);
+    setTimeout(function() { progressTurn(); }, 4000);
+    setTimeout(function() { $(".die").toggle(); }, 6000);
+
 }
 
 // run game
 $(document).ready(function() {
 
-    //start the game
-    updateStatus("Lets Play!");
-    setTimeout(function() { progressTurn(); }, 2000);
+    //title screen start buttons
+    $("#pvc").click(function() { startGame("pvc") });
+    $("#pvp").click(function() { startGame("pvp") });
 
+    // quit button
+    // dummy position now for reset hand
     $("#quit").click(function() {
         resetActiveHand();
     });
@@ -356,7 +432,7 @@ $(document).ready(function() {
 
         //overlay selected icon
         // circle = document.createElement("i");
-        // circle.classList.add("far", "fa-circle", "fa-stack-1x");
+        // circle.classList.add("far", "fa-circle", "fa-stack-3x");
         // $(circle).css("color", "Orange");
         // (this).appendChild(circle);
 
