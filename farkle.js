@@ -55,7 +55,7 @@ function roll() {
 }
 
 function resetActiveHand() {
-    console.log("resetActiveHand called");
+    //console.log("resetActiveHand called");
     dice = document.getElementsByClassName("die");
     for (let i = 0; i < 6; i++) {
         activeHand[i] = 0;
@@ -76,6 +76,7 @@ function updateStatus(message) {
 // checks passed hand for bust condition
 // and updates game status
 function bustCheck(bustCheckHand) {
+    console.log("bustCheck");
     score = getScore(bustCheckHand);
     if (0 == score) {
         updateStatus("Bust!");
@@ -101,7 +102,7 @@ function rotateDie() {
         if (dice[i].classList.contains("notSelected")) {
             angle = Math.round((Math.random() * 1000) % 360);
             $(dice[i].childNodes[0]).css("transform", "rotate(" + angle + "deg)");
-            console.log(dice[i].childNodes[0]);
+            //console.log(dice[i].childNodes[0]);
         }
     }
 
@@ -166,7 +167,8 @@ function getDie(position) {
 };
 
 // Returns score of hand passed to it
-// called when a die is clicked
+// called to detect busts
+// called to detect if valid hand only has been selected
 function getScore(passedHand) {
 
     // deep copy passed hand
@@ -174,51 +176,66 @@ function getScore(passedHand) {
     let dieCount = [0, 0, 0, 0, 0, 0];
     let score = 0;
 
+    // build dieCount
     for (let i = 0; i < inputHand.length; i++) { // traverse die values
         for (let j = 0; j < 6; j++) { // traverse counter values
-            if (inputHand[i] == (j + 1)) { dieCount[j]++; }
-            //break;
-        }
-    }
-    // console.log("dieCount: " + dieCount);
-
-    // full straight
-    if (inputHand.length == 6) {
-        for (let i = 0; i < 6; i++) {
-            if (dieCount[i] != 1) { break }
-            if (i == 5) {
-                //disableRollOnNonScore(dieCount);
-                score = 1500;
-                return score;
+            if (inputHand[i] == (j + 1)) {
+                dieCount[j]++;
             }
         }
     }
 
-    // partial straights
-    if (inputHand.length >= 5) {
-        // partial straight 1-5
-        for (let i = 0; i < 4; i++) {
-            if (dieCount[i] < 1) { break };
-            if (i == 4) { score += 500 };
+    // console.log("dieCount: " + dieCount);
+    // console.log("inputHand: " + inputHand);
+    // console.log("inputHand.length: " + inputHand.length);
+
+    // full straight
+    for (let i = 0; i < 6; i++) {
+        if (dieCount[i] != 1) {
+            // console.log("full straight not detected");
+            break;
         }
-        // partial straight 2-6
-        for (let i = 1; i < 6; i++) {
-            if (dieCount[i] < 1) { break };
-            if (i == 5) { score += 750 };
+        if (i == 5) {
+            // console.log("full straight detected");
+            //disableRollOnNonScore(dieCount);
+            dieCount = [0, 0, 0, 0, 0, 0];
+            score = 1500;
         }
     }
 
-    // // 3 pairs
-    // var pairCount = 0;
-    // for (let i = 0; i < dieCount.length; i++) {
-    //     if (dieCount[i] == 2) { pairCount++; }
-    // }
-    // if (pairCount == 3) {
-    //     // console.log("3 pairs")
-    //     score = 1500;
-    //     return score;
-    // }
+    // partial straights
+    // console.log("checking for straights");
+    // partial straight 1-5
+    for (let i = 0; i < 5; i++) {
+        if (dieCount[i] != 1) {
+            // console.log("PS 1-5 not detected");
+            break
+        };
+        if (i == 4) {
+            for (let i = 0; i < 5; i++) {
+                dieCount[i] -= 1;
+            }
+            score += 500;
+            // console.log("PS 1-5 detected");
+            // console.log("PS dieCount: " + dieCount);
+        };
+    }
+    // partial straight 2-6
+    for (let i = 1; i < 6; i++) {
+        if (dieCount[i] != 1) {
+            console.log("PS 2-6 not detected");
+            break
+        };
+        if (i == 5) {
+            for (let i = 1; i < 6; i++) {
+                dieCount[i] -= 1;
+            }
+            score += 750
+            console.log("partial straight 2-6 detected");
+        };
+    }
 
+    // remaining combinations
     for (let i = 0; i < dieCount.length; i++) {
 
         // more than three of a kind
@@ -256,9 +273,10 @@ function getScore(passedHand) {
             dieCount[i] = 0;
         }
     }
+
     disableRollOnNonScore(dieCount, score);
-    // console.log("score: " + score);
-    // console.log(dieCount);
+    console.log("score: " + score);
+    console.log("dieCount: " + dieCount);
     return score;
 }
 
@@ -271,6 +289,7 @@ function disableRollOnNonScore(dieCount, score) {
     for (let i = 0; i < 6; i++) {
         if (dieCount[i] != 0) {
             nonScoreDie++;
+            console.log("nonScoreDie: " + nonScoreDie);
         }
     }
     //is player has selected non-scoring die
@@ -292,6 +311,7 @@ function getSelectedScore() {
             selectedHand[i] = activeHand[i];
         }
     }
+    console.log("getSelectedHand");
     return getScore(selectedHand);
 }
 
@@ -337,15 +357,14 @@ function startGame(mode) {
     $(".die").toggle();
 
     if (mode == "pvc") {
-        updateStatus("player vs computer")
+        //updateStatus("player vs computer")
     } else if (mode == "pvp") {
-        updateStatus("player vs player")
-        console.log("pvc")
+        //updateStatus("player vs player")
     }
     //start the game
-    setTimeout(function() { updateStatus("Lets Play!"); }, 2000);
-    setTimeout(function() { progressTurn(); }, 4000);
-    setTimeout(function() { $(".die").toggle(); }, 6000);
+    setTimeout(function() { updateStatus("Lets Play!"); }, 0);
+    setTimeout(function() { progressTurn(); }, 2000);
+    setTimeout(function() { $(".die").toggle(); }, 2000);
 
 }
 
@@ -446,8 +465,18 @@ $(document).ready(function() {
         //update selected menu value
         if (turn == "p1") { p1Selected = getSelectedScore(); } else { p2Selected = getSelectedScore(); }
         updateScoreBoard();
+    });
+
+
+    $("#magicDie").click(function() {
+        activeHand = [1, 2, 3, 4, 5, 6];
+        selectedDie = [false, false, false, false, false, false];
+        bankedDie = [false, false, false, false, false, false];
+        updateView();
+
 
     });
+
 
 });
 
