@@ -14,7 +14,7 @@
 </head>
 <body>
 
-    <div id="container">
+    <div class="container" id="content">
 
         <!-- heading -->
         <div class="row" id="heading">
@@ -40,21 +40,34 @@
 
                 <!-- status overlay -->
                 <div class="row">
-                    <div class="col" id="status" >
+                    <div class="col-12" id="status" >
                         <p id="statusmsg">status</p>
                     </div>
                 </div>
-            
-                <div class="row">
-                    <div class="col-12 d-flex justify-content-center fa-stack fa-1x" id="board" >
-                            <span class = "die notSelected d1"></span>
-                            <span class = "die notSelected d2"></span>
-                            <span class = "die notSelected d3"></span>
-                            <span class = "die notSelected d4"></span>
-                            <span class = "die notSelected d5"></span>
-                            <span class = "die notSelected d6"></span>
+
+                <!--playable board-->            
+                <div class="row" id="playableBoard">
+
+                    <div class="col-2 spacer">
+                    </div>
+
+                    <div class="col-8" id="board" >
+                        <div class="row">
+                            <div class = "die notSelected fa-stack col-4" id="d1"></div>
+                            <div class = "die notSelected fa-stack col-4" id="d2"></div>
+                            <div class = "die notSelected fa-stack col-4" id="d3"></div>
+                        </div>
+                        <div class="row">
+                            <div class = "die notSelected fa-stack col-4" id="d4"></div>
+                            <div class = "die notSelected fa-stack col-4" id="d5"></div>
+                            <div class = "die notSelected fa-stack col-4" id="d6"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-2 spacer">
                     </div>
                 </div>
+
 
                 <div class="row" id="menuStatus">
 
@@ -89,10 +102,6 @@
         </div>
 
     </div>
-    <span class="fa-stack fa-3x" id="magicDie">
-        <i class="far fa-circle fa-stack-2x"></i>
-        <i class="fa fa-dice-three fa-stack-1x"></i>
-    </span>
 
     <!--javascript-->
     <script type="text/javascript" src="farkle.js"></script>

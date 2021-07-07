@@ -17,7 +17,7 @@ p2Selected = 0;
 activeHand = [0, 0, 0, 0, 0, 0];
 selectedDie = [false, false, false, false, false, false];
 bankedDie = [false, false, false, false, false, false];
-turn = "p2";
+turn = "none";
 winScore = 2000;
 gameMode = "none";
 roll();
@@ -32,15 +32,24 @@ function roll() {
 
     // get new value for valid die & build bustcheck
     let bustCheckHand = [];
+
     for (let i = 0; i < 6; i++) {
         if (selectedDie[i] == false && bankedDie[i] == false) {
             activeHand[i] = getDie(i);
+
+            // let dice = document.getElementsByClassName("die");
+            // let angle = Math.round((Math.random() * 1000) % 360);
+            // $(dice[i].childNodes[0]).css("transform", "rotate(" + angle + "deg)");
+
             bustCheckHand.push(activeHand[i]);
         }
     }
 
     updateView();
-    rotateDie();
+
+    //rotateDie();
+    //alert("rotateDie was called");
+
     if (bustCheckHand.length > 0) {
         // check for bust; else continue play
         bustCheck(bustCheckHand);
@@ -98,29 +107,31 @@ function bustCheck(bustCheckHand) {
 
 function rotateDie() {
     dice = document.getElementsByClassName("die");
+    callCount = 0;
     for (let i = 0; i < 6; i++) {
         if (dice[i].classList.contains("notSelected")) {
+            callCount++;
             angle = Math.round((Math.random() * 1000) % 360);
             $(dice[i].childNodes[0]).css("transform", "rotate(" + angle + "deg)");
             //console.log(dice[i].childNodes[0]);
         }
     }
-
+    //alert(callCount);
 }
 
 // updates webpage with data structure values
 function updateView() {
-    // console.log("update View called");
 
-    // updates webpage with dice information
-    let activeDice = document.getElementsByClassName("die");
-    // for (let i = 0; i < activeDice.length; i++) {
-    //     $(activeDice[i]).hide();
-    // }
+    let dice = document.getElementsByClassName("die");
+    // let circle = document.createElement("i");
+    // circle.classList.add("far", "fa-circle", "fa-stack-1x");
 
-    for (let i = 0; i < activeDice.length; i++) {
-        if (activeDice[i].childNodes[0]) {
-            activeDice[i].removeChild(activeDice[i].childNodes[0]);
+    // remove previous dice
+    for (let i = 0; i < dice.length; i++) {
+
+        //remove all pre existing child nodes
+        while (dice[i].firstChild) {
+            dice[i].removeChild(dice[i].firstChild)
         }
 
         let diceValue = document.createElement("i");
@@ -146,16 +157,10 @@ function updateView() {
                 break;
         }
         diceValue.classList.add("fa-stack-1x");
-        activeDice[i].appendChild(diceValue);
+        dice[i].appendChild(diceValue);
+        // dice[i].appendChild(circle);
     }
-    rotateDie();
-    // for (let i = 0; i < activeDice.length; i++) {
-    //     let time = 1000 + (i * 100);
-    //     setTimeout(function() { $(activeDice[i]).show() }, time);
-    // }
-
     updateScoreBoard();
-
 };
 
 // Returns a random value between 1 and 6
@@ -281,8 +286,6 @@ function getScore(passedHand) {
 }
 
 // Disable roll options if non-scoring die are selected
-// PROBELEMO: 0 is used to signify all die counted AND ALSO no scoring die
-// this wont detect situation where all die selected and all are scoring
 function disableRollOnNonScore(dieCount, score) {
 
     let nonScoreDie = 0;
@@ -389,8 +392,7 @@ $(document).ready(function() {
             if (selectedDie[i] == true) {
                 bankedDie[i] = true;
                 // update html display to show banked
-                dice[i].classList.remove("selected");
-                dice[i].classList.add("banked");
+                $(dice[i]).toggleClass("selected banked");
             }
         }
         // console.log("banked: " + bankedDie);
@@ -431,39 +433,26 @@ $(document).ready(function() {
         }
         updateScoreBoard();
         // next turn
-
         progressTurn();
-
-
     });
 
 
     // click on a die
     $(".die").click(function() {
-        // check die not banked
-        if ((this).classList.contains("banked")) {
-            return
-        }
+
+        // do nothing if die is banked
+        if ((this).classList.contains("banked")) { return }
 
         // update class of clicked die
-        (this).classList.toggle("selected");
-        (this).classList.toggle("notSelected");
+        $((this)).toggleClass("selected notSelected");
 
-        //overlay selected icon
-        // circle = document.createElement("i");
-        // circle.classList.add("far", "fa-circle", "fa-stack-3x");
-        // $(circle).css("color", "Orange");
-        // (this).appendChild(circle);
-
-        // update data structure of selected Die
+        // update data structure of clicked die
         let dice = document.getElementsByClassName("die");
         let pos = jQuery.inArray((this), dice);
-        // console.log("this pos = " + pos);
         selectedDie[pos] = !selectedDie[pos];
-        // console.log("selectedDie[pos]: " + selectedDie[pos]);
 
         //update selected menu value
-        if (turn == "p1") { p1Selected = getSelectedScore(); } else { p2Selected = getSelectedScore(); }
+        turn == "p1" ? p1Selected = getSelectedScore() : p2Selected = getSelectedScore();
         updateScoreBoard();
     });
 
@@ -473,14 +462,10 @@ $(document).ready(function() {
         selectedDie = [false, false, false, false, false, false];
         bankedDie = [false, false, false, false, false, false];
         updateView();
-
-
     });
 
 
 });
-
-
 //MISCELLANEOUS TESTS
 
 // tests score function
