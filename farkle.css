@@ -1,259 +1,255 @@
-@charset "UTF-8";
-
-/**
+    @charset "UTF-8";
+    /**
  * Description
  * @authors Your Name (you@example.org)
  * @date    2021-06-25 09:32:20
  * @version 1.0.0
  */
-
-@font-face {
-    font-family: 'orotundheavy';
-    src: url('Orotund-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'plainblackwidenormal';
-    src: url('Plain_Black_Wide-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
-#content {
-    max-width: 500px;
-    margin: auto;
-    margin-top: 20px;
-    /* background-color: silver; */
-    background-image: url("stonewallsponge4.png");
-    padding: 20px;
-}
-
-#heading {
-    font-size: 48px;
-    text-align: center;
-    font-family: 'orotundheavy';
-    padding: 0px;
-}
-
-#boardContainer {
-    position: relative;
-    height: 400px;
-    background-image: url("boardbit.png");
-    border-style: solid;
-    border-width: 6px;
-    border-color: #534848;
-    margin: 4px;
-    /* padding: 15px; */
-    display: none;
-}
-
-#titleScreen {
-    position: relative;
-    height: 400px;
-    text-align: center;
-    padding: 0px;
-    font-family: 'orotundheavy';
-    font-size: 36px;
-    display: block;
-}
-
-#status {
-    position: absolute;
-    /* height: 200px; */
-    height: 66%;
-    padding: 0px;
-    text-align: center;
-    z-index: 2;
-}
-
-#status>p {
-    position: absolute;
-    font-family: 'orotundheavy';
-    font-size: 36px;
-    margin: 0;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-}
-
-#board {
-    /* position: absolute; */
-    top: 0px;
-    /* width: 100%; */
-    height: auto;
-    z-index: 1;
-    /* align-items: center; */
-    /* border: solid; */
-    border-color: blueviolet;
-}
-
-.spacer {
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    /* border: solid; */
-    border-color: yellow;
-}
-
-#menuStatus {
-    position: absolute;
-    width: 100%;
-    height: auto;
-    bottom: 0px;
-    z-index: 1;
-    padding: 15px;
-    /* border: solid; */
-    border-color: green;
-}
-
-#playableBoard {
-    position: absolute;
-    width: 100%;
-    height: auto;
-    top: 30px;
-    z-index: 1;
-    /* padding: 15px; */
-    /* border: solid;
-    border-color: green; */
-}
-
-#playButtons {
-    font-family: 'orotundheavy';
-    /* font-size: 56px; */
-    /* padding: 10px; */
-}
-
-#p1name,
-#p2name {
-    font-family: 'orotundheavy';
-    font-size: 24px;
-    display: table;
-    margin: 0 auto;
-}
-
-#p1table,
-#p2table {
-    /* padding: 10px; */
-    font-family: 'Dosis', sans-serif;
-    font-size: 14px;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-}
-
-.selected {
-    color: palegoldenrod;
-}
-
-.notSelected {
-    color: linen;
-}
-
-.banked {
-    color: silver;
-}
-
-.die {
-    font-size: 46px;
-    /* width: auto; */
-    /* height: auto; */
-    /* padding: 10px; */
-    /* width: 48px; */
-    /* vertical-align: top; */
-    /* border: solid; */
-    border-color: orange;
-    width: fit-content;
-}
-
-.die>i {
-    /* border: solid; */
-    border-color: aqua;
-    /* display: inline; */
-    width: fit-content;
-}
-
-#p1Selected,
-#p1Total,
-#p1Round,
-#p2Selected,
-#p2Total,
-#p2Round,
-.goalScore,
-.divider {
-    float: right;
-}
-
-.bottom {
-    float: inline-end;
-}
-
-#overlay {
-    position: fixed;
-    display: none;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 2;
-    cursor: pointer;
-}
-
-.trueDie {
-    pointer-events: none;
-}
-
-#p1table {
-    background-image: url(paper1.png);
-}
-
-#p2table {
-    background-image: url(paper2.png);
-}
-
-
-/* div {
-    border: solid;
-} */
-
-.simple-highlight {
-    background-color: rgb(255, 230, 0, 0.3);
-    padding-right: 0.4em;
-    padding-left: 0.4em;
-}
-
-.fa-circle {
-    transform: scale(1.6);
-    color: rgba(255, 166, 0, 0.4);
-}
-
-#d1>i {
-    transform: translate(25px, -5px) rotate(23deg);
-}
-
-#d2>i {
-    transform: translate(-5px, 25px) rotate(102deg);
-}
-
-#d3>i {
-    transform: translate(-20px, -15px) rotate(201deg);
-}
-
-#d4>i {
-    transform: translate(0px, -30px) rotate(332deg);
-}
-
-#d5>i {
-    transform: translate(20px, -10px) rotate(231deg);
-}
-
-#d6>i {
-    transform: translate(-15px, -20px) rotate(132deg);
-}
+    
+    @font-face {
+        font-family: 'orotundheavy';
+        src: url('Orotund-webfont.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }
+    
+    @font-face {
+        font-family: 'plainblackwidenormal';
+        src: url('Plain_Black_Wide-webfont.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }
+    
+    #content {
+        max-width: 500px;
+        margin: auto;
+        margin-top: 20px;
+        /* background-color: silver; */
+        background-image: url("stonewallsponge4.png");
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-bottom: 20px;
+    }
+    
+    #heading {
+        position: relative;
+        text-align: center;
+    }
+    
+    #banner {
+        width: 100%;
+        padding-top: 5px;
+    }
+    
+    #heading>span {
+        font-size: 36px;
+        font-family: 'plainblackwidenormal';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        padding-top: 15px;
+    }
+    
+    #boardContainer {
+        position: relative;
+        height: 400px;
+        background-image: url("boardbit.png");
+        border-style: solid;
+        border-width: 6px;
+        border-color: #534848;
+        margin: 4px;
+        /* padding: 15px; */
+        display: none;
+    }
+    
+    #titleScreen {
+        position: relative;
+        height: 400px;
+        text-align: center;
+        padding: 0px;
+        font-family: 'orotundheavy';
+        font-size: 36px;
+        display: block;
+    }
+    
+    #status {
+        position: absolute;
+        /* height: 200px; */
+        height: 66%;
+        padding: 0px;
+        text-align: center;
+        z-index: 2;
+    }
+    
+    #status>p {
+        position: absolute;
+        font-family: 'orotundheavy';
+        font-size: 36px;
+        margin: 0;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+    }
+    
+    #board {
+        /* position: absolute; */
+        top: 0px;
+        /* width: 100%; */
+        height: auto;
+        z-index: 1;
+        /* align-items: center; */
+        /* border: dotted;
+        border-color: blueviolet; */
+    }
+    
+    .spacer {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        /* border: dotted;
+        border-color: yellow; */
+    }
+    
+    #menuStatus {
+        position: absolute;
+        width: 100%;
+        height: auto;
+        bottom: 0px;
+        z-index: 1;
+        padding: 15px;
+        /* border: dotted;
+        border-color: cyan; */
+    }
+    
+    #playableBoard {
+        position: absolute;
+        width: 100%;
+        height: auto;
+        bottom: 180px;
+        top: 0px;
+        z-index: 1;
+        /* padding: 15px; */
+        /* border: dotted;
+        border-color: green; */
+    }
+    
+    #playButtons {
+        font-family: 'orotundheavy';
+        /* font-size: 56px; */
+        /* padding: 10px; */
+    }
+    
+    #p1name,
+    #p2name {
+        font-family: 'orotundheavy';
+        font-size: 24px;
+        display: table;
+        margin: 0 auto;
+    }
+    
+    #p1table,
+    #p2table {
+        /* padding: 10px; */
+        font-family: 'Dosis', sans-serif;
+        font-size: 14px;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+    }
+    
+    .selected {
+        /* color: palegoldenrod; */
+        color: linen;
+    }
+    
+    .notSelected {
+        color: linen;
+    }
+    
+    .banked {
+        color: silver;
+    }
+    
+    .die {
+        /* font-size: 44px; */
+        /* width: auto; */
+        /* height: auto; */
+        /* padding: 10px; */
+        /* width: 48px; */
+        /* vertical-align: top; */
+        /* border-color: orange;
+        border: dotted; */
+        /* width: fit-content; */
+        /* width: 48px;
+        /* height: 48px; */
+        /* padding: 0px;
+        /* margin: 0px; */
+        transition: 0.5s;
+    }
+    
+    .die>i {
+        font-size: 44px;
+        border-color: aqua;
+        /* border: dotted; */
+        /* display: inline; */
+        width: fit-content;
+        height: fit-content;
+        margin: 15px;
+    }
+    
+    #p1Selected,
+    #p1Total,
+    #p1Round,
+    #p2Selected,
+    #p2Total,
+    #p2Round,
+    .goalScore,
+    .divider {
+        float: right;
+    }
+    
+    .bottom {
+        float: inline-end;
+    }
+    
+    #overlay {
+        position: fixed;
+        display: none;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 2;
+        cursor: pointer;
+    }
+    
+    .trueDie {
+        pointer-events: none;
+    }
+    
+    #p1table {
+        background-image: url(paper1.png);
+    }
+    
+    #p2table {
+        background-image: url(paper2.png);
+    }
+    
+    .simple-highlight {
+        background-color: rgb(255, 230, 0, 0.3);
+        padding-right: 0.4em;
+        padding-left: 0.4em;
+    }
+    
+    .fa-circle {
+        transform: scale(1.6);
+        color: rgba(255, 166, 0, 0.4);
+    }
