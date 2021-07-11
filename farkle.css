@@ -253,3 +253,7 @@
         transform: scale(1.6);
         color: rgba(255, 166, 0, 0.4);
     }
+    
+    .fa-square {
+        color: dimgray;
+    }

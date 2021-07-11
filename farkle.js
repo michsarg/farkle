@@ -93,8 +93,12 @@ function rotateDie() {
     dice = document.getElementsByClassName("die");
     for (let i = 0; i < 6; i++) {
         if (dice[i].classList.contains("notSelected")) {
-            distance = Math.round((Math.random() * 1000 % 150));
-            angle = Math.round((Math.random() * 1000 % 90));
+            distance = Math.round((Math.random() * 1000 % 75));
+            angle = Math.round((Math.random() * 1000 % 180));
+            //improve spacings
+            if (i % 2 == 0) {
+                distance += 75;
+            }
             $(dice[i]).css("transform", "translate(0px, " + distance + "px) rotate(" + angle + "deg)");
         }
     }
@@ -114,6 +118,11 @@ function updateView() {
         while (dice[i].firstChild) {
             dice[i].removeChild(dice[i].firstChild)
         }
+
+
+        let square = document.createElement("i");
+        $(square).addClass("fas fa-square fa-stack-1x");
+
 
         let circle = document.createElement("i");
         $(circle).addClass("far fa-circle fa-stack-1x");
@@ -142,6 +151,7 @@ function updateView() {
         }
         $(diceValue).addClass("fa-stack-1x");
         dice[i].setAttribute("title", activeHand[i]);
+        dice[i].appendChild(square);
         dice[i].appendChild(diceValue);
         dice[i].appendChild(circle);
         $(circle).hide();
@@ -435,7 +445,7 @@ $(document).ready(function() {
 
         // update class of clicked die & presentation
         $((this)).toggleClass("selected notSelected");
-        $((this).childNodes[1]).toggle(); // apply circle selected
+        $((this).childNodes[2]).toggle(); // apply circle selected
 
         // update data structure of clicked die
         let dice = document.getElementsByClassName("die");
