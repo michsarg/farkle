@@ -25,7 +25,7 @@
         margin: auto;
         margin-top: 20px;
         /* background-color: silver; */
-        background-image: url("stonewallsponge4.png");
+        background-image: url("stonewallsponge2bit.png");
         padding-left: 20px;
         padding-right: 20px;
         padding-bottom: 20px;
@@ -38,7 +38,7 @@
     
     #banner {
         width: 100%;
-        padding-top: 5px;
+        padding-top: 3px;
     }
     
     #heading>span {
@@ -200,6 +200,11 @@
         width: fit-content;
         height: fit-content;
         margin: 15px;
+        transition: 0.5s;
+    }
+    
+    .opacityNone>i {
+        opacity: 0.0;
     }
     
     #p1Selected,

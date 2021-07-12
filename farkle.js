@@ -52,9 +52,11 @@ function roll() {
 function resetActiveHand() {
     let dice = document.getElementsByClassName("die");
     for (let i = 0; i < 6; i++) {
+        // reset data structures
         activeHand[i] = 0;
         selectedDie[i] = false;
         bankedDie[i] = false;
+        // reset visual representation
         dice[i].classList.remove("banked", "selected");
         dice[i].classList.add("notSelected");
     }
@@ -70,8 +72,11 @@ function updateStatus(message) {
 // checks passed hand for bust condition
 // and updates game status
 function bustCheck(bustCheckHand) {
-    console.log("bustCheck");
-    score = getScore(bustCheckHand);
+    // console.log("bustCheck");
+    let score = getScore(buildDieCount(bustCheckHand), true);
+    // disabling should be irrelevant here
+    // let submission of dice do determination of disabling
+    // disableRollOnNonScore(dieCount);
     if (0 == score) {
         updateStatus("Bust!");
         if (turn == "p1") {
@@ -160,6 +165,7 @@ function updateView() {
 };
 
 // Returns a random value between 1 and 6
+// used to fill activeHand
 function getDie(position) {
     let numb = Math.random();
     let rand = (numb * 10) % 5;
@@ -167,15 +173,12 @@ function getDie(position) {
     return rand;
 };
 
-// Returns score of hand passed to it
-// called to detect busts
-// called to detect if valid hand only has been selected
-function getScore(passedHand) {
+
+function buildDieCount(passedHand) {
 
     // deep copy passed hand
     let inputHand = JSON.parse(JSON.stringify(passedHand));
     let dieCount = [0, 0, 0, 0, 0, 0];
-    let score = 0;
 
     // build dieCount
     for (let i = 0; i < inputHand.length; i++) { // traverse die values
@@ -186,9 +189,17 @@ function getScore(passedHand) {
         }
     }
 
-    // console.log("dieCount: " + dieCount);
-    // console.log("inputHand: " + inputHand);
-    // console.log("inputHand.length: " + inputHand.length);
+    return dieCount;
+
+}
+
+// Returns score of dieCount array passed to it
+// called to detect busts
+// called to detect if valid hand only has been selected
+function getScore(dieCount, disableCheck) {
+
+    // let dieCount = buildDieCount(passedHand);
+    let score = 0;
 
     // full straight
     for (let i = 0; i < 6; i++) {
@@ -224,7 +235,7 @@ function getScore(passedHand) {
     // partial straight 2-6
     for (let i = 1; i < 6; i++) {
         if (dieCount[i] != 1) {
-            console.log("PS 2-6 not detected");
+            // console.log("PS 2-6 not detected");
             break
         };
         if (i == 5) {
@@ -232,7 +243,7 @@ function getScore(passedHand) {
                 dieCount[i] -= 1;
             }
             score += 750
-            console.log("partial straight 2-6 detected");
+                // console.log("partial straight 2-6 detected");
         };
     }
 
@@ -275,20 +286,20 @@ function getScore(passedHand) {
         }
     }
 
-    disableRollOnNonScore(dieCount, score);
-    console.log("score: " + score);
-    console.log("dieCount: " + dieCount);
+    // works by removing scoring die from dieCount
+    // then submists this to disableRollOnNonScore
+    if (disableCheck == true) { disableRollOnNonScore(dieCount); }
     return score;
 }
 
 // Disable roll options if non-scoring die are selected
-function disableRollOnNonScore(dieCount, score) {
+function disableRollOnNonScore(dieCount) {
 
     let nonScoreDie = 0;
     for (let i = 0; i < 6; i++) {
         if (dieCount[i] != 0) {
             nonScoreDie++;
-            console.log("nonScoreDie: " + nonScoreDie);
+            // console.log("nonScoreDie: " + nonScoreDie);
         }
     }
     //is player has selected non-scoring die
@@ -301,6 +312,7 @@ function disableRollOnNonScore(dieCount, score) {
     }
 }
 
+
 // returns score of selected die only
 function getSelectedScore() {
     selectedHand = [];
@@ -310,8 +322,8 @@ function getSelectedScore() {
             selectedHand[i] = activeHand[i];
         }
     }
-    console.log("getSelectedHand");
-    return getScore(selectedHand);
+    dieCount = buildDieCount(selectedHand);
+    return getScore(dieCount, true);
 }
 
 // updates html with score variables
@@ -332,7 +344,6 @@ function winCheck() {
 
 }
 
-
 function progressTurn() {
     if (turn == "p1") {
         turn = "p2";
@@ -345,26 +356,113 @@ function progressTurn() {
         $("#p1name").addClass("simple-highlight");
         $("#p2name").removeClass("simple-highlight");
     }
-
     resetActiveHand();
+    $(".die").addClass("opacityNone");
+    setTimeout(function() { $(".die").removeClass("opacityNone"), 1000 });
+    if (gameMode == "pvc" && turn == "p2") { computerPlay(); }
+
 }
 
-
-function startGame(mode) {
+function startGame(selectedMode) {
 
     document.getElementById("titleScreen").style.display = "none";
     document.getElementById("boardContainer").style.display = "block";
     $(".die").toggle();
 
-    if (mode == "pvc") {
+    gameMode = selectedMode;
+    if (gameMode == "pvc") {
         //updateStatus("player vs computer")
-    } else if (mode == "pvp") {
+    } else if (gameMode == "pvp") {
         //updateStatus("player vs player")
     }
     //start the game
     setTimeout(function() { updateStatus("Lets Play!"); }, 0);
     setTimeout(function() { progressTurn(); }, 2000);
     setTimeout(function() { $(".die").toggle(); }, 2000);
+
+}
+
+function computerPlay() {
+
+    let wait = false;
+
+    // while (turn == "p2" && wait == false) {
+
+    let clickStack = [];
+
+    let playableHand = [];
+    for (let i = 0; i < 6; i++) {
+        if (bankedDie[i] == false) {
+            playableHand[i] = activeHand[i]
+        } else {
+            playableHand[i] = -1;
+        }
+    }
+    let dieCount = buildDieCount(playableHand);
+    console.log("playableHand: " + playableHand);
+    dieCount = buildDieCount(playableHand);
+    console.log("dieCount: " + dieCount);
+
+    dice = document.getElementsByClassName("die");
+
+    //detect triples
+    for (let i = 0; i < 6; i++) {
+        if (dieCount[i] >= 3) {
+            for (let i = 0; i < 6; i++) {
+                if (playableHand[i] == (i + 1) && clickStack.length <= 3) {
+                    clickStack.push(dice[i]);
+                }
+            }
+
+        }
+    }
+
+    if (clickStack.length == 0) {
+        // select all ones
+        if (dieCount[0] > 0) {
+            for (let i = 0; i < 6; i++) {
+                if (playableHand[i] == 1) {
+                    clickStack.push(dice[i]);
+                }
+            }
+        }
+        // select all fives
+        if (dieCount[4] > 0) {
+            for (let i = 0; i < 6; i++) {
+                if (playableHand[i] == 5) {
+                    clickStack.push(dice[i]);
+                }
+            }
+        }
+    }
+
+    // let bankedCount = 0;
+    // for (let i = 0; i < 6; i++) {
+    //     if (bankedDie[i] == true) {
+    //         bankedCount++;
+    //     }
+    // }
+    // console.log('bankedCount: ' + bankedCount);
+    // if (bankedCount >= 3) {
+    //     clickStack.push(document.getElementById("scorePass"));
+    // } else {
+    //     clickStack.push(document.getElementById("scoreRoll"));
+    // }
+    clickStack.push(document.getElementById("scorePass"));
+
+    console.log("clickStack" + clickStack);
+    for (let i = 0; i < clickStack.length; i++) {
+        let delay = ((i + 1) * 500) + 1000;
+        if (i == (clickStack.length - 1)) { delay += 1000; }
+
+        setTimeout(function() {
+                console.log("clickStack[" + i + "]: " + clickStack[i]);
+                clickStack[i].click()
+            },
+            delay
+        );
+    }
+    // }
 
 }
 
@@ -457,7 +555,6 @@ $(document).ready(function() {
         updateScoreBoard();
     });
 
-
     $("#magicDie").click(function() {
         activeHand = [1, 2, 3, 4, 5, 6];
         selectedDie = [false, false, false, false, false, false];
@@ -465,12 +562,25 @@ $(document).ready(function() {
         updateView();
     });
 
-    $(".die").hover(function() {
-
-    });
-
 
 });
+
+// // loop for computer moves
+// while (gameMode == "pvc") {
+//     if (turn == "p2") {
+//         alert("p2 turn detected");
+//         //determine a scoring move
+//         for (let i = 0; i < 6; i++) {
+//             (Math.random() > 0.5) ? selectedDie[i] = true: selectedDie[i] = false;
+//         }
+//         score = getSelectedScore();
+//         alert(score);
+//         break
+//         //implement and submit it
+//     }
+// }
+
+
 //MISCELLANEOUS TESTS
 
 // tests score function
