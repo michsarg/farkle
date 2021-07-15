@@ -19,27 +19,32 @@
         <!-- heading -->
         <div class="row">
             <span class="col-12" id="heading">
-                <img src="bannerbit.png" id="banner" style="width: 100%">
+                <img src="bannersponge.png" id="banner" style="width: 100%">
                 <span>Kingdom Come Dice</span>
             </span>
         </div>
 
         <!-- title screen overlay-->
-        <div class="row" id="titleScreen">
-            <div class="col-12">
-                <p style="margin: auto;">Select game mode:</p>
-                <div class="d-grid gap-1" id="titleButtons">
-                    <button id="pvc" class="btn btn-light">Player vs Computer</button>
-                    <button id="pvp" class="btn btn-light">Player vs Player</button>
+        <div id="titleScreen">
+            <div class="row">
+                <div class="col-12">
+                    <p style="margin: auto;">Select game mode:</p>
                 </div>
+            </div>
+            <div class="row">
+                <div class="col-3"></div>
+                <div class="col-6">
+                    <div class="d-grid gap-1" id="titleButtons">
+                        <button id="pvc" class="btn btn-light">Player vs Computer</button>
+                        <button id="pvp" class="btn btn-light">Player vs Player</button>
+                    </div>    
+                </div>
+                <div class="col-3"></div>
             </div>
         </div>
 
-
         <div id="boardContainer" class="row">
             <div class="col-12">
-
-
 
                 <!-- status overlay -->
                 <div class="row">
@@ -74,9 +79,19 @@
 
                     <div class="col-4" id="p1table">
                         <span id="p1name">Player 1</span>
-                        <span>total:<span class="goalScore">2000</span><span class="divider">/</span><span id="p1Total">0</span> <br>
-                        <span>round:<span id="p1Round">0</span> <br>
-                        <span>selected:<span id="p1Selected">0</span>
+                        <span class="total">total:
+                            <span class="goalScore">2000</span>
+                            <span class="divider">/</span>
+                            <span id="p1Total">0</span> 
+                        </span>
+                        <br>
+                        <span class="round">round:
+                            <span id="p1Round">0</span>
+                        </span>
+                        <br>
+                        <span class="select">selected:
+                            <span id="p1Selected">0</span>
+                        </span>
                     </div>
 
                     <div class="col-4">
@@ -92,9 +107,19 @@
 
                     <div class="col-4" id="p2table">
                         <span id="p2name">Player 2</span>
-                        <span>total:<span class="goalScore">2000</span><span class="divider">/</span><span id="p2Total">0</span> <br>
-                        <span>round:<span id="p2Round">0</span> <br>
-                        <span>selected:<span id="p2Selected">0</span>
+                        <span class="total">total:
+                            <span class="goalScore">2000</span>
+                            <span class="divider">/</span>
+                            <span id="p2Total">0</span> 
+                        </span>
+                        <br>
+                        <span class="round">round:
+                            <span id="p2Round">0</span>
+                        </span>
+                        <br>
+                        <span class="select">selected:
+                            <span id="p2Selected">0</span>
+                        </span>
                     </div>
 
                 </div>
@@ -103,7 +128,6 @@
         </div>
 
     </div>
-    <p>Suggested Die: <span id="suggestedDie"></span></p>
     <!--javascript-->
     <script type="text/javascript" src="farkle.js"></script>
 

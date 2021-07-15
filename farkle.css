@@ -25,7 +25,7 @@
         margin: auto;
         margin-top: 20px;
         /* background-color: silver; */
-        background-image: url("stonewallsponge2bit.png");
+        background-image: url("stonewallsponge4.png");
         padding-left: 20px;
         padding-right: 20px;
         padding-bottom: 20px;
@@ -55,7 +55,7 @@
     #boardContainer {
         position: relative;
         height: 400px;
-        background-image: url("boardbit.png");
+        background-image: url("board3.png");
         border-style: solid;
         border-width: 6px;
         border-color: #534848;
@@ -72,6 +72,7 @@
         font-family: 'orotundheavy';
         font-size: 36px;
         display: block;
+        top: 90px;
     }
     
     #status {
@@ -203,7 +204,7 @@
         transition: 0.5s;
     }
     
-    .opacityNone>i {
+    .opacityNone>* {
         opacity: 0.0;
     }
     
@@ -254,6 +255,11 @@
         padding-left: 0.4em;
     }
     
+    .highlight {
+        background-color: rgb(255, 230, 0, 0.3);
+        transition: 0.5s;
+    }
+    
     .fa-circle {
         transform: scale(1.6);
         color: rgba(255, 166, 0, 0.4);
@@ -261,4 +267,12 @@
     
     .fa-square {
         color: dimgray;
+    }
+    
+    .deactivated {
+        pointer-events: none;
+    }
+    
+    .activated {
+        pointer-events: auto;
     }
