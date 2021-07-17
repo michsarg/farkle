@@ -55,10 +55,11 @@
     #boardContainer {
         position: relative;
         height: 400px;
-        background-image: url("board3.png");
+        background-image: url("board4.png");
         border-style: solid;
-        border-width: 6px;
+        border-width: 10px;
         border-color: #534848;
+        border-radius: 5px;
         margin: 4px;
         /* padding: 15px; */
         display: none;
@@ -87,12 +88,16 @@
     #status>p {
         position: absolute;
         font-family: 'orotundheavy';
-        font-size: 36px;
+        font-size: 42px;
         margin: 0;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 2;
+    }
+    
+    #statusmsg {
+        transition: 0.1s;
     }
     
     #board {
@@ -139,9 +144,14 @@
     }
     
     #playButtons {
+        padding-top: 3px;
+    }
+    
+    #playButtons>*,
+    #titleButtons>button {
         font-family: 'orotundheavy';
-        /* font-size: 56px; */
-        /* padding: 10px; */
+        font-size: 18px;
+        padding: 2px;
     }
     
     #p1name,
@@ -177,19 +187,6 @@
     }
     
     .die {
-        /* font-size: 44px; */
-        /* width: auto; */
-        /* height: auto; */
-        /* padding: 10px; */
-        /* width: 48px; */
-        /* vertical-align: top; */
-        /* border-color: orange;
-        border: dotted; */
-        /* width: fit-content; */
-        /* width: 48px;
-        /* height: 48px; */
-        /* padding: 0px;
-        /* margin: 0px; */
         transition: 0.5s;
     }
     
@@ -198,8 +195,8 @@
         border-color: aqua;
         /* border: dotted; */
         /* display: inline; */
-        width: fit-content;
-        height: fit-content;
+        /* width: fit-content; */
+        /*height: fit-content; */
         margin: 15px;
         transition: 0.5s;
     }
