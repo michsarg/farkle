@@ -208,6 +208,10 @@
         opacity: 0.0;
     }
     
+    .transOff>i {
+        transition: 0.0s;
+    }
+    
     #p1Selected,
     #p1Total,
     #p1Round,

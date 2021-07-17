@@ -30,7 +30,6 @@ gameMode = "none";
 function roll() {
 
     //resetDieTop();
-
     let dice = document.getElementsByClassName("die");
     let bustCheckHand = [];
     for (let i = 0; i < 6; i++) {
@@ -40,13 +39,13 @@ function roll() {
         }
     }
 
-
     setTimeout(function() { updateView(); }, 1000);
     rotateDie();
 
     if (bustCheckHand.length > 0) {
         // continues handling of turn in bustCheck function
-        bustCheck(bustCheckHand);
+        setTimeout(function() { bustCheck(bustCheckHand); }, 2000);
+
     } else {
         updateStatus("Play again!");
         setTimeout(function() {
@@ -55,7 +54,12 @@ function roll() {
     }
 }
 
+
+// Hides die, resets data structures, visual representations
+// then rolls and shows die
 function resetActiveHand() {
+    console.log("resetActiveHand called");
+    $(".die").css("transition", "0.0s");
     $(".die").hide();
     let dice = document.getElementsByClassName("die");
     for (let i = 0; i < 6; i++) {
@@ -70,7 +74,8 @@ function resetActiveHand() {
     setTimeout(function() {
         roll();
         $(".die").show();
-    }, 1000);
+        $(".die").css("transition", "0.5s");
+    }, 1500);
 }
 
 function updateStatus(message) {
@@ -84,11 +89,10 @@ function updateStatus(message) {
 function bustCheck(bustCheckHand) {
     // console.log("bustCheck");
     let score = getScore(buildDieCount(bustCheckHand), true);
-    // disabling should be irrelevant here
-    // let submission of dice do determination of disabling
-    // disableRollOnNonScore(dieCount);
+    // submission of dice does determination of disabling
     if (0 == score) {
         updateStatus("Bust!");
+
         if (turn == "p1") {
             p1Round = 0;
             p1Selected = 0;
@@ -96,28 +100,13 @@ function bustCheck(bustCheckHand) {
             p2Round = 0;
             p2Selected = 0;
         }
-        updateView();
+        updateScoreBoard();
         setTimeout(function() {
             resetActiveHand();
             progressTurn();
         }, 1500);
     }
 }
-
-function resetDieTop() {
-    dice = document.getElementsByClassName("die");
-    for (let i = 0; i < 6; i++) {
-        if (dice[i].classList.contains("notSelected")) {
-            $(dice[i]).css("transition", "0.0s");
-            $(dice[i]).addClass("opacityNone");
-            $(dice[i]).css("transform", "translate(0px, 0px) rotate(0deg");
-            $(dice[i]).removeClass("opacityNone");
-            $(dice[i]).css("transition", "0.5s");
-        }
-    }
-}
-
-
 
 function rotateDie() {
     dice = document.getElementsByClassName("die");
@@ -375,13 +364,16 @@ function winCheck() {
 }
 
 function progressTurn() {
+    // unnessary extra rotation somwehre in here 
+    // when going from player 1 to player 2
+    // but not from player 2 to player 1
     if (turn == "p1") {
         turn = "p2";
         updateStatus("Player 2");
         $("#p1name").removeClass("simple-highlight");
         $("#p2name").addClass("simple-highlight");
         if (gameMode == "pvc") {
-            //disable buttons
+            //disable dick click on p2 play pvc
             $(".die").addClass("deactivated");
         }
     } else {
@@ -390,15 +382,13 @@ function progressTurn() {
         $("#p1name").addClass("simple-highlight");
         $("#p2name").removeClass("simple-highlight");
         if (gameMode == "pvc") {
-            //disable buttons
+            //enable dice click on p1 play pvc
             $(".die").removeClass("deactivated");
         }
     }
-    resetActiveHand();
-    // $(".die").addClass("opacityNone");
-    // setTimeout(function() { $(".die").removeClass("opacityNone"), 1000 });
-    if (gameMode == "pvc" && turn == "p2") { computerPlay(); }
 
+    resetActiveHand();
+    if (gameMode == "pvc" && turn == "p2") { computerPlay(); }
 }
 
 function startGame(selectedMode) {
@@ -422,30 +412,40 @@ function startGame(selectedMode) {
 
 function computerPlay() {
 
+    // queue of clicks to be played
     let clickStack = [];
+
+    // selectable/unbanked dice available for this round
+    // unselectable/banked dice are -1
     let playableHand = [];
     for (let i = 0; i < 6; i++) {
         if (bankedDie[i] == false) {
-            playableHand[i] = activeHand[i]
-        } else {
-            playableHand[i] = -1;
-        }
+            playableHand[i] = activeHand[i];
+        } else { playableHand[i] = -1; }
     }
+
     let dieCount = buildDieCount(playableHand);
     console.log("playableHand: " + playableHand);
     dieCount = buildDieCount(playableHand);
     console.log("dieCount: " + dieCount);
 
+
     dice = document.getElementsByClassName("die");
 
     //detect triples
     for (let i = 0; i < 6; i++) {
+        // find more than 3 of the same dice via dieCount
+        // dieCount[5] = 3 means there are 3x die with number 6
         if (dieCount[i] >= 3) {
-            for (let i = 0; i < 6; i++) {
-                if (playableHand[i] == (i + 1) && clickStack.length <= 3) {
-                    clickStack.push(dice[i]);
+            // iterate over every dice in the playable hand
+            for (let j = 0; j < 6; j++) {
+                // this will select the first three, but cant do double triples
+                if (playableHand[j] == (i + 1) && clickStack.length <= 3) {
+                    // queue a click for the die with the matching number
+                    clickStack.push(dice[j]);
                 }
             }
+
 
         }
     }
@@ -482,8 +482,8 @@ function computerPlay() {
             delay
         );
     }
-    // set Timeout for  scorePass or scoreRoll
 
+    // set Timeout for  scorePass or scoreRoll
     setTimeout(function() {
         let nonSel = $(".notSelected").length;
         console.log(".notSelected.length: " + nonSel);
@@ -549,33 +549,36 @@ $(document).ready(function() {
     });
 
     $("#scorePass").click(function() {
-        dice = document.getElementsByClassName("die");
-        for (let i = 0; i < 6; i++) {
-            if (selectedDie[i] == true) {
-                bankedDie[i] = true;
-                // update html display to show banked
-                dice[i].classList.remove("selected");
-                dice[i].classList.add("banked");
+
+        setTimeout(function() {
+            dice = document.getElementsByClassName("die");
+            for (let i = 0; i < 6; i++) {
+                if (selectedDie[i] == true) {
+                    bankedDie[i] = true;
+                    // update html display to show banked
+                    dice[i].classList.remove("selected");
+                    dice[i].classList.add("banked");
+                }
             }
-        }
-        if (turn == "p1") {
-            $("#p1table > .total > span").addClass("highlight");
-            setTimeout(function() { $("#p1table > .total > span").removeClass("highlight"); }, 1000)
-            p1Total += p1Round;
-            p1Total += p1Selected;
-            p1Round = 0;
-            p1Selected = 0;
-        } else {
-            $("#p2table > .total > span").addClass("highlight");
-            setTimeout(function() { $("#p2table > .total > span").removeClass("highlight"); }, 1000)
-            p2Total += p2Round;
-            p2Total += p2Selected;
-            p2Round = 0;
-            p2Selected = 0;
-        }
-        updateScoreBoard();
-        // next turn
-        progressTurn();
+            if (turn == "p1") {
+                $("#p1table > .total > span").addClass("highlight");
+                setTimeout(function() { $("#p1table > .total > span").removeClass("highlight"); }, 1000)
+                p1Total += p1Round;
+                p1Total += p1Selected;
+                p1Round = 0;
+                p1Selected = 0;
+            } else {
+                $("#p2table > .total > span").addClass("highlight");
+                setTimeout(function() { $("#p2table > .total > span").removeClass("highlight"); }, 1000)
+                p2Total += p2Round;
+                p2Total += p2Selected;
+                p2Round = 0;
+                p2Selected = 0;
+            }
+            updateScoreBoard();
+            progressTurn();
+        }, 500);
+
     });
 
 
