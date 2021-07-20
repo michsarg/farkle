@@ -20,6 +20,7 @@ bankedDie = [false, false, false, false, false, false];
 turn = "none";
 winScore = 2000;
 gameMode = "none";
+rotateAlt = 0;
 
 
 
@@ -55,13 +56,8 @@ function roll() {
     }
 }
 
-
-// Hides die, resets data structures, visual representations
-// then rolls and shows die
+// resets data structures and visual representations
 function resetActiveHand() {
-    console.log("resetActiveHand called");
-    // $(".die").css("transition", "0.0s");
-    // $(".die").hide();
     let dice = document.getElementsByClassName("die");
     for (let i = 0; i < 6; i++) {
         // reset data structures
@@ -73,11 +69,6 @@ function resetActiveHand() {
         dice[i].classList.add("notSelected");
     }
     roll();
-    // setTimeout(function() {
-    //     roll();
-    //     $(".die").show();
-    //     $(".die").css("transition", "0.5s");
-    // }, 500);
 }
 
 // displays a status overlay for 1s
@@ -88,16 +79,15 @@ function updateStatus(message, flashing) {
         let count = 0;
         emphasize = setInterval(function() {
             if (count % 2 == 0) {
-                $("#statusmsg").css("color", "darkorange")
+                $("#statusmsg").css("text-shadow", "0px 0px 10px linen")
             } else {
-                $("#statusmsg").css("color", "sienna")
+                $("#statusmsg").css("text-shadow", "0px 0px ")
             }
             count += 1;
-            console.log("count: " + count);
-        }, 150);
+        }, 200);
         emphasize;
     } else {
-        $("#statusmsg").css("color", "black");
+        $("#statusmsg").css("text-shadow", "0px 0px");
     }
 
     $("#status").show();
@@ -140,7 +130,8 @@ function rotateDie() {
             if (!(gameMode == "pvc" && turn == "p2")) { $(dice[i]).addClass("deactivated"); }
             distance = Math.round((Math.random() * 1000 % 75));
             angle = Math.round((Math.random() * 1000 % 180));
-            if (i % 2 == 0) { distance += 75; } //improve spacings
+            if (i % (rotateAlt % 2) == 0) { distance += 75; } //improve spacings
+            rotateAlt++;
             $(dice[i]).css("transform", "translate(0px, " + distance + "px) rotate(" + angle + "deg)");
             if (!(gameMode == "pvc" && turn == "p2")) { $(dice[i]).removeClass("deactivated"); }
         }
@@ -207,13 +198,11 @@ function getDie() {
     return rand;
 };
 
-
+// returns array of sums of each dice number
 function buildDieCount(passedHand) {
-
     // deep copy passed hand
     let inputHand = JSON.parse(JSON.stringify(passedHand));
     let dieCount = [0, 0, 0, 0, 0, 0];
-
     // build dieCount
     for (let i = 0; i < inputHand.length; i++) { // traverse die values
         for (let j = 0; j < 6; j++) { // traverse counter values
@@ -222,9 +211,7 @@ function buildDieCount(passedHand) {
             }
         }
     }
-
     return dieCount;
-
 }
 
 // Returns score of dieCount array passed to it
@@ -346,7 +333,6 @@ function disableRollOnNonScore(dieCount) {
     }
 }
 
-
 // returns score of selected die only
 function getSelectedScore() {
     selectedHand = [];
@@ -371,17 +357,44 @@ function updateScoreBoard() {
     winCheck();
 }
 
+// checks if a player has won and restarts game
 function winCheck() {
-    if (p1Total >= winScore) { alert("Player 1 wins") }
-    if (p2Total >= winScore) { alert("Player 2 wins") }
-    //reset game state
+    if (p1Total >= winScore) {
+        document.getElementById("winText").innerHTML = "player 1 wins";
+        $("#winScreen").show()
+        $("#status, #rules").hide();
+        $(".die").addClass("blurred");
+        $("#p1name, #p2name").removeClass("simple-highlight");
+    } else if (p2Total >= winScore) {
+        document.getElementById("winText").innerHTML = "player 2 wins";
+        $("#winScreen").show()
+        $("#status, #rules").hide();
+        $(".die").addClass("blurred");
+        $("#p1name, #p2name").removeClass("simple-highlight");
+    }
+}
 
+function resetToStart() {
+    p1Total = 0;
+    p2Total = 0;
+    p1Round = 0;
+    p2Round = 0;
+    p1Selected = 0;
+    p2Selected = 0;
+    activeHand = [0, 0, 0, 0, 0, 0];
+    selectedDie = [false, false, false, false, false, false];
+    bankedDie = [false, false, false, false, false, false];
+    turn = "none";
+    gameMode = "none";
+    rotateAlt = 0;
+    document.getElementById("titleScreen").style.display = "block";
+    document.getElementById("boardContainer").style.display = "block";
+    $(".die").toggle();
+    roll();
 }
 
 function progressTurn() {
-    // unnessary extra rotation somwehre in here 
-    // when going from player 1 to player 2
-    // but not from player 2 to player 1
+
     if (turn == "p1") {
         turn = "p2";
         updateStatus("Player 2", false);
@@ -392,7 +405,7 @@ function progressTurn() {
             $(".die").addClass("deactivated");
         }
     } else {
-        turn = "p1"
+        turn = "p1";
         updateStatus("Player 1", false);
         $("#p1name").addClass("simple-highlight");
         $("#p2name").removeClass("simple-highlight");
@@ -406,11 +419,16 @@ function progressTurn() {
     if (gameMode == "pvc" && turn == "p2") { computerPlay(); }
 }
 
+
 function startGame(selectedMode) {
 
+    //hide elements
     document.getElementById("titleScreen").style.display = "none";
-    document.getElementById("boardContainer").style.display = "block";
-    $(".die").toggle();
+
+    //show elments
+    // now board containers is always showing
+    //document.getElementById("boardContainer").style.display = "block";
+
 
     gameMode = selectedMode;
     if (gameMode == "pvc") {
@@ -418,17 +436,33 @@ function startGame(selectedMode) {
     } else if (gameMode == "pvp") {
         //updateStatus("player vs player")
     }
+
     //start the game
     setTimeout(function() { updateStatus("Lets Play!", false); }, 0);
-    setTimeout(function() { progressTurn(); }, 2000);
-    setTimeout(function() { $(".die").toggle(); }, 2000);
+    setTimeout(function() { progressTurn(); }, 1500);
+    setTimeout(function() {
+        $("#playableBoard").show();
+        $("#menuStatus").show();
+        $("#quitScreen").hide();
+        $("#titleScreen").hide();
+    }, 0);
+    setTimeout(function() { $(".die").show(); }, 1000);
 
 }
 
 function computerPlay() {
 
+    let playAgain = false;
+
+    // exit function if bust roll is made
+    let returnedScore = getScore(buildDieCount(activeHand, false));
+    if (returnedScore == 0) {
+        console.log("bust detected, returnedScore:" + returnedScore);
+        return
+    }
+
     // queue of clicks to be played
-    let clickQueue = [];
+    var clickQueue = [];
 
     // selectable/unbanked dice available for this round
     // unselectable/banked dice are -1
@@ -439,20 +473,12 @@ function computerPlay() {
         } else { playableHand[i] = -1; }
     }
 
-    console.log("playableHand: " + playableHand);
+    //console.log("playableHand: " + playableHand);
     let dieCount = buildDieCount(playableHand);
-    console.log("dieCount: " + dieCount);
-
-    clickQueue.push(function() { console.log("do nothing") });
-    clickQueue.push(function() { console.log("do nothing") });
-    clickQueue.push(function() { console.log("do nothing") });
-    clickQueue.push(function() { console.log("do nothing") });
-    clickQueue.push(function() { console.log("do nothing") });
+    //console.log("dieCount: " + dieCount);
 
 
-
-
-    let dice = document.getElementsByClassName("die");
+    var dice = document.getElementsByClassName("die");
 
     //detect triples
     for (let i = 0; i < 6; i++) {
@@ -464,20 +490,21 @@ function computerPlay() {
                 // this will select the first three, but cant do double triples
                 if (playableHand[j] == (i + 1) && clickQueue.length <= 3) {
                     // queue a click for the die with the matching number
-                    clickQueue.push(function() { $(dice[j]).click() });
+                    clickQueue.push($(dice[j]));
+                    console.log(dice[j]);
                 }
             }
-
-
         }
     }
+
     // if no triples try ones or fives
     if (clickQueue.length == 0) {
         // select all ones
         if (dieCount[0] > 0) {
             for (let i = 0; i < 6; i++) {
                 if (playableHand[i] == 1) {
-                    clickQueue.push(function() { $(dice[i]).click() });
+                    // clickQueue.push(function() { $(die[i]).click(); });
+                    clickQueue.push(dice[i]);
                 }
             }
         }
@@ -485,89 +512,83 @@ function computerPlay() {
         if (dieCount[4] > 0) {
             for (let i = 0; i < 6; i++) {
                 if (playableHand[i] == 5) {
-                    clickQueue.push(function() { $(dice[i]).click() });
+                    // clickQueue.push(function() { $(die[i]).click(); });
+                    clickQueue.push(dice[i]);
                 }
             }
         }
     }
 
-    /*     //OPTION A : setTimer
-
-        // clickStack.push(document.getElementById("scorePass"));
-        let lastDelay = 0;
-        //console.log("clickQueue" + clickQueue);
-        for (let i = 0; i < clickQueue.length; i++) {
-            let delay = ((i + 1) * 500) + 1000;
-            lastDelay = delay;
-            setTimeout(function() {
-                    //console.log("clickStack[" + i + "]: " + clickQueue[i]);
-                    clickQueue[i].click()
-                },
-                delay
-            );
-        }
-
-        // set Timeout for  scorePass or scoreRoll
-        setTimeout(function() {
-            let nonSel = $(".notSelected").length;
-            //console.log(".notSelected.length: " + nonSel);
-            if (nonSel >= 3) {
-                $('#scoreRoll').click();
-                // if still p2 turn, roll again
-                setTimeout(function() {
-                    if (turn == "p2") {
-                        computerPlay()
-                    }
-                }, 3000);
-
-            } else {
-                $('#scorePass').click();
-            }
-        }, (lastDelay + 1000));
-     */
-    // OPTION B: setInterval
+    // setInterval
 
     let notSel = $(".notSelected").length;
+    console.log("notSel: " + notSel);
     if (notSel >= 3) {
         // play again 
-        clickQueue.push(function() { $("#scoreRoll").click() })
-
+        console.log("scoreRoll enqueued")
+        clickQueue.push($('#scoreRoll'));
+        // here need to trigger computer Play again at end of queue
+        playAgain = true;
     } else {
         // end turn 
-        clickQueue.push(function() { $("#scorePass").click() })
-        console.log('scorePass');
+        console.log("scorePass enqueued")
+        clickQueue.push($('#scorePass'));
+
     }
 
     let runClicks = setInterval(function() {
         // stop clicking if the turn is over
         if (turn != "p2") {
+            console.log("turn: " + turn);
             console.log("terminating clickQueue")
+            runClicks = [];
             clearInterval(runClicks);
+            return
         }
         // if its still the players round and no clicks left, 
-        if (clickQueue.length == 0) {
-            //computerPlay();
+        // this is an error state and shouldnt be reached
+        else if (clickQueue.length == 0) {
             console.log("empty queue!");
+            clearInterval(runClicks);
+            runClicks = [];
+            return
         }
         // else there are clicks left
-        else {
+        else if (clickQueue.length > 0) {
             // perform the next queued click
+            console.log("clickQueue.length: " + clickQueue.length);
             let selection = clickQueue.shift();
             // console.log("clickQueue.length: " + clickQueue.length);
-            console.log("selection: " + $(selection).val());
-            selection;
+            console.log("selection[0]: " + selection[0]);
+            selection.click();
+            if (playAgain == true) {
+                console.log("computerPlay Triggered");
+                setTimeout(function() {
+                    playAgain = false;
+                    computerPlay();
+                }, 1000);
+            }
+
+
         }
 
     }, 1000);
-    runClicks;
+    if (turn == "p2") {
+        runClicks;
+    }
 
-
+    return
 }
 
 // run game
 $(document).ready(function() {
 
-    roll();
+    $("#titleScreen").show();
+    $("#playableBoard").hide();
+    $("#menuStatus").hide();
+    $("#status, #rules").hide()
+
+    resetToStart();
 
     //title screen start buttons
     $("#pvc").click(function() { startGame("pvc") });
@@ -576,11 +597,46 @@ $(document).ready(function() {
     // quit button
     // dummy position now for reset hand
     $("#quit").click(function() {
-        resetActiveHand();
+        $("#playableBoard").hide();
+        $("#menuStatus").hide();
+        $("#status, #rules").hide()
+        $("#winScreen").hide()
+        $("#quitScreen").show();
     });
 
-    // listener for scoreRoll button/method
-    // can assume that only scoring dice have been selected
+    $("#chooseQuit").click(function() {
+        $("#quitScreen").hide();
+        resetToStart();
+    });
+
+    $("#chooseResume").click(function() {
+        $("#quitScreen").hide();
+        $("#playableBoard").show();
+        $("#menuStatus").show();
+    });
+
+    $("#returnMenu").click(function() {
+        $("#winScreen").hide();
+        $(".die").removeClass("blurred");
+        resetToStart();
+    })
+
+    $("#hideRules").click(function() {
+        $("#rules").hide();
+        $("#playableBoard").show();
+        $("#menuStatus").show();
+    });
+
+    $("#help").click(function() {
+        $("#playableBoard").hide();
+        $("#menuStatus").hide();
+        $("#status").hide()
+        $("#winScreen").hide()
+        $("#titleScreen").hide();
+        $("#rules").show();
+    });
+
+    // bank score from selected die and roll again
     $("#scoreRoll").click(function() {
         console.log('scoreRoll');
         dice = document.getElementsByClassName("die");
@@ -610,6 +666,7 @@ $(document).ready(function() {
 
     });
 
+    // bank score from selected die and pass turn
     $("#scorePass").click(function() {
         dice = document.getElementsByClassName("die");
         for (let i = 0; i < 6; i++) {
@@ -641,8 +698,7 @@ $(document).ready(function() {
 
     });
 
-
-    // click on a die
+    // select a die
     $(".die").click(function() {
 
         // do nothing if die is banked
@@ -662,6 +718,7 @@ $(document).ready(function() {
         updateScoreBoard();
     });
 
+    // additional function for testing hands
     $("#magicDie").click(function() {
         activeHand = [1, 2, 3, 4, 5, 6];
         selectedDie = [false, false, false, false, false, false];
@@ -669,27 +726,4 @@ $(document).ready(function() {
         updateView();
     });
 
-
 });
-
-//MISCELLANEOUS TESTS
-
-// tests score function
-function testScore(testHand) {
-    let thisHand = testHand;
-    let thisScore = getScore(thisHand);
-    // console.log("thisScore: " + thisScore);
-    alert(thisScore);
-}
-
-function on() {
-    document.getElementById("overlay").style.display = "block";
-}
-
-function off() {
-    document.getElementById("overlay").style.display = "none";
-}
-
-function clickTest() {
-    alert("clicked");
-}

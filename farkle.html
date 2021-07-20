@@ -24,32 +24,86 @@
             </span>
         </div>
 
-        <!-- title screen overlay-->
-        <div id="titleScreen">
-            <div class="row">
-                <div class="col-12">
-                    <p style="margin: auto;">Select game mode:</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-3"></div>
-                <div class="col-6">
-                    <div class="d-grid gap-1" id="titleButtons">
-                        <button id="pvc" class="btn btn-light">Player vs Computer</button>
-                        <button id="pvp" class="btn btn-light">Player vs Player</button>
-                    </div>    
-                </div>
-                <div class="col-3"></div>
-            </div>
-        </div>
-
         <div id="boardContainer" class="row">
             <div class="col-12">
 
+                <!-- title screen overlay-->
+                <div  id="titleScreen">
+                    <div class="row">
+                        <div class="col-12">
+                            <p style="margin: auto;" id="titleScreentext">Select game mode:</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3"></div>
+                        <div class="col-6">
+                            <div class="d-grid gap-1" id="titleButtons">
+                                <button id="pvc" class="btn btn-light">player vs computer</button>
+                                <button id="pvp" class="btn btn-light">player vs player</button>
+                                <button id="howTo" class="btn btn-light">how to play</button>
+                            </div>    
+                        </div>
+                        <div class="col-3"></div>
+                    </div>
+                </div>
+
+                <!-- quit screen overlay-->
+                <div id="quitScreen">
+                    <div class="row">
+                        <div class="col-12">
+                            <p style="margin: auto;">Do you want to quit?</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3"></div>
+                        <div class="col-6">
+                            <div class="d-grid gap-1" id="quitButtons">
+                                <button id="chooseQuit" class="btn btn-light">yes, quit</button>
+                                <button id="chooseResume" class="btn btn-light">no, resume</button>
+                            </div>    
+                        </div>
+                        <div class="col-3"></div>
+                    </div>
+                </div>
+
+                
+                <!-- win screen overlay-->
+                <div id="winScreen">
+                    <div class="row">
+                        <div class="col-12">
+                            <p id="winText" style="margin: auto;"></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3"></div>
+                        <div class="col-6">
+                            <div class="d-grid gap-1" id="winButtons">
+                                <button id="returnMenu" class="btn btn-light">return to menu</button>
+                            </div>    
+                        </div>
+                        <div class="col-3"></div>
+                    </div>
+                </div>
+
+                <!-- rules overlay -->
+                <div id="rules">
+                    <div class="row">
+                        <div class="col-12">
+                            <p>Game Rules</p>
+                            <p class="explain"> Players take turns to roll the dice and can select a scoring combo. 
+                            The player can add the points to the round score and roll the remaining dice, or add the points to their total score and pass.</p>
+                            <p class="explain"> Single 1s are worth 100 each and single 5s are worth 50 each. Three dice of any number are worth their number times 100 (e.g. 5+5+5 = 500). If more than three of a number are rolled, the score is doubled for each addition to the set.</p>
+                            <button id="hideRules" class="btn btn-light">okay</button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- status overlay -->
-                <div class="row">
-                    <div class="col-12" id="status" >
-                        <p id="statusmsg">status</p>
+                <div id="status">
+                    <div class="row">
+                        <div class="col-12">
+                            <p id="statusmsg">status</p>
+                        </div>
                     </div>
                 </div>
 
@@ -74,7 +128,7 @@
                     </div>
                 </div>
 
-
+                <!-- menu status-->
                 <div class="row" id="menuStatus">
 
                     <div class="col-4" id="p1table">

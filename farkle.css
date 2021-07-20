@@ -62,30 +62,52 @@
         border-radius: 5px;
         margin: 4px;
         /* padding: 15px; */
-        display: none;
+        display: block;
     }
     
-    #titleScreen {
-        position: relative;
-        height: 400px;
+    #titleScreen,
+    #quitScreen,
+    #winScreen {
+        position: absolute;
         text-align: center;
         padding: 0px;
         font-family: 'orotundheavy';
         font-size: 36px;
-        display: block;
         top: 90px;
+        display: none;
+        z-index: 3;
+        width: 100%;
+        text-shadow: 0px 0px 10px linen;
+    }
+    
+    #titleScreentext {
+        text-shadow: 0px 0px 10px linen;
+    }
+    
+    #status,
+    #rules {
+        position: absolute;
+        text-align: center;
+        padding: 0px;
+        font-family: 'orotundheavy';
+        font-size: 36px;
+        top: 0px;
+        z-index: 2;
+        width: 100%;
+        text-shadow: 0px 0px 10px linen;
     }
     
     #status {
-        position: absolute;
-        /* height: 200px; */
         height: 66%;
-        padding: 0px;
-        text-align: center;
-        z-index: 2;
     }
     
-    #status>p {
+    .explain {
+        font-size: 18px;
+        font-family: 'Dosis', sans-serif;
+        text-shadow: 0px 0px 5px linen;
+    }
+    
+    #statusmsg {
         position: absolute;
         font-family: 'orotundheavy';
         font-size: 42px;
@@ -97,7 +119,7 @@
     }
     
     #statusmsg {
-        transition: 0.1s;
+        transition: 0.2s;
     }
     
     #board {
@@ -148,7 +170,9 @@
     }
     
     #playButtons>*,
-    #titleButtons>button {
+    #titleButtons>button,
+    #quitButtons>button,
+    #winButtons>button {
         font-family: 'orotundheavy';
         font-size: 18px;
         padding: 2px;
@@ -197,8 +221,12 @@
         /* display: inline; */
         /* width: fit-content; */
         /*height: fit-content; */
-        margin: 15px;
+        /* margin: 15px; */
         transition: 0.5s;
+    }
+    
+    .blurred {
+        filter: blur(3px) opacity(0.8);
     }
     
     .opacityNone>* {
@@ -251,9 +279,7 @@
     }
     
     .simple-highlight {
-        background-color: rgb(255, 230, 0, 0.3);
-        padding-right: 0.4em;
-        padding-left: 0.4em;
+        text-shadow: 0px 0px 10px yellow;
     }
     
     .highlight {
