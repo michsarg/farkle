@@ -1,21 +1,14 @@
     @charset "UTF-8";
-    /**
- * Description
- * @authors Your Name (you@example.org)
- * @date    2021-06-25 09:32:20
- * @version 1.0.0
- */
-    
     @font-face {
         font-family: 'orotundheavy';
-        src: url('Orotund-webfont.woff') format('woff');
+        src: url('../fonts/Orotund-webfont.woff') format('woff');
         font-weight: normal;
         font-style: normal;
     }
     
     @font-face {
         font-family: 'plainblackwidenormal';
-        src: url('Plain_Black_Wide-webfont.woff') format('woff');
+        src: url('../fonts/Plain_Black_Wide-webfont.woff') format('woff');
         font-weight: normal;
         font-style: normal;
     }
@@ -24,8 +17,7 @@
         max-width: 500px;
         margin: auto;
         margin-top: 20px;
-        /* background-color: silver; */
-        background-image: url("stonewallsponge4.png");
+        background-image: url("../images/stonewallsponge4.png");
         padding-left: 20px;
         padding-right: 20px;
         padding-bottom: 20px;
@@ -55,13 +47,12 @@
     #boardContainer {
         position: relative;
         height: 400px;
-        background-image: url("board4.png");
+        background-image: url("../images/board4.png");
         border-style: solid;
         border-width: 10px;
         border-color: #534848;
         border-radius: 5px;
         margin: 4px;
-        /* padding: 15px; */
         display: block;
     }
     
@@ -77,10 +68,6 @@
         display: none;
         z-index: 3;
         width: 100%;
-        text-shadow: 0px 0px 10px linen;
-    }
-    
-    #titleScreentext {
         text-shadow: 0px 0px 10px linen;
     }
     
@@ -123,14 +110,9 @@
     }
     
     #board {
-        /* position: absolute; */
         top: 0px;
-        /* width: 100%; */
         height: auto;
         z-index: 1;
-        /* align-items: center; */
-        /* border: dotted;
-        border-color: blueviolet; */
     }
     
     .spacer {
@@ -138,8 +120,6 @@
         padding-right: 10px;
         padding-bottom: 10px;
         padding-top: 10px;
-        /* border: dotted;
-        border-color: yellow; */
     }
     
     #menuStatus {
@@ -149,8 +129,6 @@
         bottom: 0px;
         z-index: 1;
         padding: 15px;
-        /* border: dotted;
-        border-color: cyan; */
     }
     
     #playableBoard {
@@ -160,13 +138,20 @@
         bottom: 180px;
         top: 0px;
         z-index: 1;
-        /* padding: 15px; */
-        /* border: dotted;
-        border-color: green; */
     }
     
     #playButtons {
         padding-top: 3px;
+    }
+    
+    #help {
+        width: 48%;
+        float: left;
+    }
+    
+    #quit {
+        width: 48%;
+        float: right;
     }
     
     #playButtons>*,
@@ -188,7 +173,6 @@
     
     #p1table,
     #p2table {
-        /* padding: 10px; */
         font-family: 'Dosis', sans-serif;
         font-size: 14px;
         padding-left: 10px;
@@ -198,7 +182,6 @@
     }
     
     .selected {
-        /* color: palegoldenrod; */
         color: linen;
     }
     
@@ -216,25 +199,11 @@
     
     .die>i {
         font-size: 44px;
-        border-color: aqua;
-        /* border: dotted; */
-        /* display: inline; */
-        /* width: fit-content; */
-        /*height: fit-content; */
-        /* margin: 15px; */
         transition: 0.5s;
     }
     
     .blurred {
         filter: blur(3px) opacity(0.8);
-    }
-    
-    .opacityNone>* {
-        opacity: 0.0;
-    }
-    
-    .transOff>i {
-        transition: 0.0s;
     }
     
     #p1Selected,
@@ -248,43 +217,16 @@
         float: right;
     }
     
-    .bottom {
-        float: inline-end;
-    }
-    
-    #overlay {
-        position: fixed;
-        display: none;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 2;
-        cursor: pointer;
-    }
-    
-    .trueDie {
-        pointer-events: none;
-    }
-    
     #p1table {
-        background-image: url(paper1.png);
+        background-image: url(../images/paper1.png);
     }
     
     #p2table {
-        background-image: url(paper2.png);
+        background-image: url(../images/paper2.png);
     }
     
     .simple-highlight {
         text-shadow: 0px 0px 10px yellow;
-    }
-    
-    .highlight {
-        background-color: rgb(255, 230, 0, 0.3);
-        transition: 0.5s;
     }
     
     .fa-circle {
@@ -302,4 +244,9 @@
     
     .activated {
         pointer-events: auto;
+    }
+    
+    #rules>.row>.col-12 {
+        padding: 0px;
+        padding-right: 20px;
     }

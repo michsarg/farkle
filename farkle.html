@@ -2,14 +2,12 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Farkle</title>
-    <link href="farkle.css" rel="stylesheet">
+    <title>Kingdom Come Dice</title>
+    <link href="css/farkle.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://kit.fontawesome.com/7c049537f0.js" crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Germania+One&display=swap" rel="stylesheet"> 
     <link href="https://fonts.googleapis.com/css2?family=Dosis&display=swap" rel="stylesheet"> 
 </head>
 <body>
@@ -19,7 +17,7 @@
         <!-- heading -->
         <div class="row">
             <span class="col-12" id="heading">
-                <img src="bannersponge.png" id="banner" style="width: 100%">
+                <img src="images/bannersponge.png" id="banner">
                 <span>Kingdom Come Dice</span>
             </span>
         </div>
@@ -31,7 +29,7 @@
                 <div  id="titleScreen">
                     <div class="row">
                         <div class="col-12">
-                            <p style="margin: auto;" id="titleScreentext">Select game mode:</p>
+                            <p>Select game mode:</p>
                         </div>
                     </div>
                     <div class="row">
@@ -50,7 +48,7 @@
                 <div id="quitScreen">
                     <div class="row">
                         <div class="col-12">
-                            <p style="margin: auto;">Do you want to quit?</p>
+                            <p>Do you want to quit?</p>
                         </div>
                     </div>
                     <div class="row">
@@ -70,7 +68,7 @@
                 <div id="winScreen">
                     <div class="row">
                         <div class="col-12">
-                            <p id="winText" style="margin: auto;"></p>
+                            <p id="winText"></p>
                         </div>
                     </div>
                     <div class="row">
@@ -91,8 +89,8 @@
                             <p>Game Rules</p>
                             <p class="explain"> Players take turns to roll then select a scoring combo of dice. 
                             The points can be saved and the turn passed, or the player can roll the remaining dice again.
-                            If a bust is rolled all points from the round are lost.</p>
-                            <p class="explain"> Single 1s are worth 100 each and single 5s are worth 50 each. Three dice of any number are worth their number times 100 (e.g. 5+5+5 = 500). If more than three of a number are rolled, the score is doubled for each addition to the set.</p>
+                            A bust loses points from the round.</p>
+                            <p class="explain"> Single 1s are worth 100 each and single 5s are worth 50 each. Three dice of any number are worth their number times 100 (e.g. 5+5+5 = 500), and score is doubled with additional matches. Numbers 1 to 5 are worth 500, 2 to 6 is 750, and 1 to 6 is 1500.</p>
                             <button id="hideRules" class="btn btn-light">okay</button>
                         </div>
                     </div>
@@ -153,8 +151,8 @@
                             <button id="scoreRoll" class="btn btn-light">score & roll</button>
                             <button id="scorePass" class="btn btn-light">score & pass</button>
                             <div>
-                                <button id="help" class="btn btn-light btn-block" style="width: 48%; float: left;">help</button>        
-                                <button id="quit" class="btn btn-light btn-block" style="width: 48%; float: right">quit</button>
+                                <button id="help" class="btn btn-light btn-block">help</button>        
+                                <button id="quit" class="btn btn-light btn-block">quit</button>
                             </div>
                         </div>
                     </div>
@@ -183,7 +181,7 @@
 
     </div>
     <!--javascript-->
-    <script type="text/javascript" src="farkle.js"></script>
+    <script type="text/javascript" src="js/farkle.js"></script>
 
 
 </body>
