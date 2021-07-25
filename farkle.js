@@ -79,9 +79,9 @@ function updateStatus(message, flashing) {
         let count = 0;
         emphasize = setInterval(function() {
             if (count % 2 == 0) {
-                $("#statusmsg").css("text-shadow", "0px 0px 10px linen")
+                $("#statusmsg").css("text-shadow", "0px 0px 5px khaki")
             } else {
-                $("#statusmsg").css("text-shadow", "0px 0px ")
+                $("#statusmsg").css("text-shadow", "0px 0px")
             }
             count += 1;
         }, 200);
@@ -114,10 +114,12 @@ function bustCheck(bustCheckHand) {
             p2Selected = 0;
         }
         updateScoreBoard();
-        setTimeout(function() {
-            resetActiveHand();
-            progressTurn();
-        }, 1000);
+        if (!winCheck()) {
+            setTimeout(function() {
+                resetActiveHand();
+                progressTurn();
+            }, 1000);
+        }
     }
 }
 
@@ -354,7 +356,6 @@ function updateScoreBoard() {
     document.getElementById("p2Total").innerHTML = p2Total;
     document.getElementById("p2Round").innerHTML = p2Round;
     document.getElementById("p2Selected").innerHTML = p2Selected;
-    winCheck();
 }
 
 // checks if a player has won and restarts game
@@ -365,12 +366,14 @@ function winCheck() {
         $("#status, #rules").hide();
         $(".die").addClass("blurred");
         $("#p1name, #p2name").removeClass("simple-highlight");
+        return true;
     } else if (p2Total >= winScore) {
         document.getElementById("winText").innerHTML = "player 2 wins";
         $("#winScreen").show()
         $("#status, #rules").hide();
         $(".die").addClass("blurred");
         $("#p1name, #p2name").removeClass("simple-highlight");
+        return true;
     }
 }
 
@@ -519,22 +522,23 @@ function computerPlay() {
         }
     }
 
-    // setInterval
+    // // setInterval
+    // let notSel = $(".notSelected").length;
+    // console.log("notSel: " + notSel);
+    // if (notSel >= 3) {
+    //     // play again 
+    //     console.log("scoreRoll enqueued")
+    //     clickQueue.push($('#scoreRoll'));
+    //     // here need to trigger computer Play again at end of queue
+    //     playAgain = true;
+    // } else {
+    //     // end turn 
+    //     console.log("scorePass enqueued")
+    //     clickQueue.push($('#scorePass'));
 
-    let notSel = $(".notSelected").length;
-    console.log("notSel: " + notSel);
-    if (notSel >= 3) {
-        // play again 
-        console.log("scoreRoll enqueued")
-        clickQueue.push($('#scoreRoll'));
-        // here need to trigger computer Play again at end of queue
-        playAgain = true;
-    } else {
-        // end turn 
-        console.log("scorePass enqueued")
-        clickQueue.push($('#scorePass'));
+    // }
 
-    }
+    clickQueue.push($('#scorePass'));
 
     let runClicks = setInterval(function() {
         // stop clicking if the turn is over
@@ -617,6 +621,8 @@ $(document).ready(function() {
 
     $("#returnMenu").click(function() {
         $("#winScreen").hide();
+        $("#playableBoard").hide();
+        $("#menuStatus").hide();
         $(".die").removeClass("blurred");
         resetToStart();
     })
@@ -691,10 +697,12 @@ $(document).ready(function() {
             p2Selected = 0;
         }
 
-        setTimeout(function() {
-            updateScoreBoard();
-            progressTurn();
-        }, 1000);
+        updateScoreBoard();
+        if (!winCheck()) {
+            setTimeout(function() {
+                progressTurn();
+            }, 1000);
+        }
 
     });
 
