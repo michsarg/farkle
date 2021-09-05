@@ -17,7 +17,7 @@
         max-width: 500px;
         margin: auto;
         margin-top: 20px;
-        background-image: url("../images/stonewallsponge4.png");
+        background-image: url("../images/stonewallsponge4.jpg");
         padding-left: 20px;
         padding-right: 20px;
         padding-bottom: 20px;
@@ -47,7 +47,7 @@
     #boardContainer {
         position: relative;
         height: 400px;
-        background-image: url("../images/board4.png");
+        background-image: url("../images/board4.jpg");
         border-style: solid;
         border-width: 10px;
         border-color: #534848;
@@ -218,11 +218,11 @@
     }
     
     #p1table {
-        background-image: url(../images/paper1.png);
+        background-image: url(../images/paper1.jpg);
     }
     
     #p2table {
-        background-image: url(../images/paper2.png);
+        background-image: url(../images/paper2.jpg);
     }
     
     .simple-highlight {
