@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Kingdom Come Dice</title>
+    <link href="css/kcdice.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/7c049537f0.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Dosis&display=swap" rel="stylesheet"> 
+</head>
+<body>
+
+    <div class="container" id="content">
+
+        <!-- heading -->
+        <div class="row">
+            <span class="col-12" id="heading">
+                <img src="images/bannersponge.png" id="banner">
+                <span>Kingdom Come Dice</span>
+            </span>
+        </div>
+
+        <div id="boardContainer" class="row">
+            <div class="col-12">
+
+                <!-- title screen overlay-->
+                <div  id="titleScreen">
+                    <div class="row">
+                        <div class="col-12">
+                            <p>Select game mode:</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3"></div>
+                        <div class="col-6">
+                            <div class="d-grid gap-1" id="titleButtons">
+                                <button id="pvc" class="btn btn-light">player vs computer</button>
+                                <button id="pvp" class="btn btn-light">player vs player</button>
+                            </div>    
+                        </div>
+                        <div class="col-3"></div>
+                    </div>
+                </div>
+
+                <!-- quit screen overlay-->
+                <div id="quitScreen">
+                    <div class="row">
+                        <div class="col-12">
+                            <p>Do you want to quit?</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3"></div>
+                        <div class="col-6">
+                            <div class="d-grid gap-1" id="quitButtons">
+                                <button id="chooseQuit" class="btn btn-light">yes, quit</button>
+                                <button id="chooseResume" class="btn btn-light">no, resume</button>
+                            </div>    
+                        </div>
+                        <div class="col-3"></div>
+                    </div>
+                </div>
+
+                
+                <!-- win screen overlay-->
+                <div id="winScreen">
+                    <div class="row">
+                        <div class="col-12">
+                            <p id="winText"></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3"></div>
+                        <div class="col-6">
+                            <div class="d-grid gap-1" id="winButtons">
+                                <button id="returnMenu" class="btn btn-light">return to menu</button>
+                            </div>    
+                        </div>
+                        <div class="col-3"></div>
+                    </div>
+                </div>
+
+                <!-- rules overlay -->
+                <div id="rules">
+                    <div class="row">
+                        <div class="col-12">
+                            <p>Game Rules</p>
+                            <p class="explain"> Players take turns to roll then select a scoring combo of dice. 
+                            The points can be saved and the turn passed, or the player can roll the remaining dice again.
+                            A bust loses points from the round.</p>
+                            <p class="explain"> Single 1s are worth 100 each and single 5s are worth 50 each. Three dice of any number are worth their number times 100 (e.g. 5+5+5 = 500), and score is doubled with additional matches. Numbers 1 to 5 are worth 500, 2 to 6 is 750, and 1 to 6 is 1500.</p>
+                            <button id="hideRules" class="btn btn-light">okay</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- status overlay -->
+                <div id="status">
+                    <div class="row">
+                        <div class="col-12">
+                            <p id="statusmsg">status</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!--playable board-->            
+                <div class="row" id="playableBoard">
+
+                    <div class="col-2 spacer">
+                    </div>
+
+                    <div class="col-8" id="board" >
+                        <div class="row">
+                            <span class="die notSelected fa-stack col-2"></span>
+                            <span class="die notSelected fa-stack col-2"></span>
+                            <span class="die notSelected fa-stack col-2"></span>
+                            <span class="die notSelected fa-stack col-2"></span>
+                            <span class="die notSelected fa-stack col-2"></span>
+                            <span class="die notSelected fa-stack col-2"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-2 spacer">
+                    </div>
+                </div>
+
+                <!-- menu status-->
+                <div class="row" id="menuStatus">
+
+                    <div class="col-4" id="p1table">
+                        <span id="p1name">Player 1</span>
+                        <span class="total">total:
+                            <span class="goalScore">2000</span>
+                            <span class="divider">/</span>
+                            <span id="p1Total">0</span> 
+                        </span>
+                        <br>
+                        <span class="round">round:
+                            <span id="p1Round">0</span>
+                        </span>
+                        <br>
+                        <span class="select">selected:
+                            <span id="p1Selected">0</span>
+                        </span>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="d-grid gap-1" id="playButtons">
+                            <button id="scoreRoll" class="btn btn-light">score & roll</button>
+                            <button id="scorePass" class="btn btn-light">score & pass</button>
+                            <div>
+                                <button id="help" class="btn btn-light btn-block">help</button>        
+                                <button id="quit" class="btn btn-light btn-block">quit</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-4" id="p2table">
+                        <span id="p2name">Player 2</span>
+                        <span class="total">total:
+                            <span class="goalScore">2000</span>
+                            <span class="divider">/</span>
+                            <span id="p2Total">0</span> 
+                        </span>
+                        <br>
+                        <span class="round">round:
+                            <span id="p2Round">0</span>
+                        </span>
+                        <br>
+                        <span class="select">selected:
+                            <span id="p2Selected">0</span>
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <!--javascript-->
+    <script type="text/javascript" src="js/kcdice.js"></script>
+
+
+</body>
+</html>
