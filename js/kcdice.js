@@ -6,19 +6,19 @@
  */
 
 // VARIABLES
-p1Total = 0;
-p2Total = 0;
-p1Round = 0;
-p2Round = 0;
-p1Selected = 0;
-p2Selected = 0;
-activeHand = [0, 0, 0, 0, 0, 0];
-selectedDie = [false, false, false, false, false, false];
-bankedDie = [false, false, false, false, false, false];
-turn = "none";
-winScore = 2000;
-gameMode = "none";
-rotateAlt = 0;
+let p1Total = 0;
+let p2Total = 0;
+let p1Round = 0;
+let p2Round = 0;
+let p1Selected = 0;
+let p2Selected = 0;
+let activeHand = [0, 0, 0, 0, 0, 0];
+let selectedDie = [false, false, false, false, false, false];
+let bankedDie = [false, false, false, false, false, false];
+let turn = "none";
+let winScore = 2000;
+let gameMode = "none";
+let rotateAlt = 0;
 
 // FUNCTIONS
 
