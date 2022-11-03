@@ -63,8 +63,8 @@ function resetActiveHand() {
 
 // displays a status overlay for 1s
 function updateStatus(message:string, flashing:boolean) {
-    let status = document.getElementById("statusmsg") as HTMLInputElement;
-    status.value = message;
+
+    (document.getElementById("statusmsg") as HTMLElement).textContent = message;
 
     let emphasize:any = null;
     if (flashing == true) {
@@ -301,7 +301,6 @@ function getSelectedScore() {
     for (let i = 0; i < 6; i++) {
         if (selectedDie[i] == true && bankedDie[i] == false) {
             selectedHand[i] = activeHand[i];
-            console.log("activeHand[i]", activeHand[i])
         }
     }
     let dieCount:Array<number> = buildDieCount(selectedHand);
@@ -311,11 +310,11 @@ function getSelectedScore() {
 // updates webpage with score values
 function updateScoreBoard() {
 
-    (document.getElementById("p1Total") as HTMLInputElement).textContent = String(p1Total);
-    (document.getElementById("p1Round") as HTMLInputElement).textContent = String(p1Round);
+    (document.getElementById("p1Total") as HTMLElement).textContent = String(p1Total);
+    (document.getElementById("p1Round") as HTMLElement).textContent = String(p1Round);
     (document.getElementById("p1Selected") as HTMLElement).textContent = String(p1Selected);
-    (document.getElementById("p2Total") as HTMLInputElement).textContent = String(p2Total);
-    (document.getElementById("p2Round") as HTMLInputElement).textContent = String(p2Round);
+    (document.getElementById("p2Total") as HTMLElement).textContent = String(p2Total);
+    (document.getElementById("p2Round") as HTMLElement).textContent = String(p2Round);
     (document.getElementById("p2Selected") as HTMLElement).textContent = String(p2Selected);
 
 }
@@ -475,7 +474,6 @@ function computerPlay() {
         // this is an error state and shouldnt be reached
         else if (clickQueue.length == 0) {
             clearInterval(runClicks);
-            console.log("Error: still player's round and no clicks left")
             return
         }
         // else there are clicks left

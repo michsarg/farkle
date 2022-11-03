@@ -60,8 +60,9 @@ function resetActiveHand() {
 }
 // displays a status overlay for 1s
 function updateStatus(message, flashing) {
-    let status = document.getElementById("statusmsg");
-    status.value = message;
+    // let status = document.getElementById("statusmsg") as HTMLInputElement;
+    // status.value = message;
+    document.getElementById("statusmsg").textContent = message;
     let emphasize = null;
     if (flashing == true) {
         let count = 0;
@@ -318,12 +319,6 @@ function updateScoreBoard() {
     document.getElementById("p2Total").textContent = String(p2Total);
     document.getElementById("p2Round").textContent = String(p2Round);
     document.getElementById("p2Selected").textContent = String(p2Selected);
-    let p2TotalElement = document.getElementById("p2Total");
-    p2TotalElement.valueAsNumber = p2Total;
-    let p2RoundElement = document.getElementById("p2Round");
-    p2RoundElement.valueAsNumber = p2Round;
-    let p2SelectedElement = document.getElementById("p2Selected");
-    p2SelectedElement.valueAsNumber = p2Selected;
 }
 // checks if a player has won and shows winScreen
 function winCheck() {
