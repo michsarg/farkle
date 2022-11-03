@@ -304,6 +304,7 @@ function getSelectedScore() {
     for (let i = 0; i < 6; i++) {
         if (selectedDie[i] == true && bankedDie[i] == false) {
             selectedHand[i] = activeHand[i];
+            console.log("activeHand[i]", activeHand[i]);
         }
     }
     let dieCount = buildDieCount(selectedHand);
@@ -311,12 +312,12 @@ function getSelectedScore() {
 }
 // updates webpage with score values
 function updateScoreBoard() {
-    let p1TotalElement = document.getElementById("p1Total");
-    p1TotalElement.valueAsNumber = p1Total;
-    let p1RoundElement = document.getElementById("p1Round");
-    p1RoundElement.valueAsNumber = p1Round;
-    let p1SelectedElement = document.getElementById("p1Selected");
-    p1SelectedElement.valueAsNumber = p1Selected;
+    document.getElementById("p1Total").textContent = String(p1Total);
+    document.getElementById("p1Round").textContent = String(p1Round);
+    document.getElementById("p1Selected").textContent = String(p1Selected);
+    document.getElementById("p2Total").textContent = String(p2Total);
+    document.getElementById("p2Round").textContent = String(p2Round);
+    document.getElementById("p2Selected").textContent = String(p2Selected);
     let p2TotalElement = document.getElementById("p2Total");
     p2TotalElement.valueAsNumber = p2Total;
     let p2RoundElement = document.getElementById("p2Round");

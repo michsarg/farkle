@@ -301,6 +301,7 @@ function getSelectedScore() {
     for (let i = 0; i < 6; i++) {
         if (selectedDie[i] == true && bankedDie[i] == false) {
             selectedHand[i] = activeHand[i];
+            console.log("activeHand[i]", activeHand[i])
         }
     }
     let dieCount:Array<number> = buildDieCount(selectedHand);
@@ -309,23 +310,13 @@ function getSelectedScore() {
 
 // updates webpage with score values
 function updateScoreBoard() {
-    let p1TotalElement =  document.getElementById("p1Total") as HTMLInputElement;
-    p1TotalElement.valueAsNumber = p1Total;
 
-    let p1RoundElement = document.getElementById("p1Round") as HTMLInputElement; 
-    p1RoundElement.valueAsNumber = p1Round;
-    
-    let p1SelectedElement = document.getElementById("p1Selected") as HTMLInputElement;
-    p1SelectedElement.valueAsNumber = p1Selected;
-    
-    let p2TotalElement =  document.getElementById("p2Total") as HTMLInputElement;
-    p2TotalElement.valueAsNumber = p2Total;
-
-    let p2RoundElement = document.getElementById("p2Round") as HTMLInputElement; 
-    p2RoundElement.valueAsNumber = p2Round;
-    
-    let p2SelectedElement = document.getElementById("p2Selected") as HTMLInputElement;
-    p2SelectedElement.valueAsNumber = p2Selected;
+    (document.getElementById("p1Total") as HTMLInputElement).textContent = String(p1Total);
+    (document.getElementById("p1Round") as HTMLInputElement).textContent = String(p1Round);
+    (document.getElementById("p1Selected") as HTMLElement).textContent = String(p1Selected);
+    (document.getElementById("p2Total") as HTMLInputElement).textContent = String(p2Total);
+    (document.getElementById("p2Round") as HTMLInputElement).textContent = String(p2Round);
+    (document.getElementById("p2Selected") as HTMLElement).textContent = String(p2Selected);
 
 }
 
