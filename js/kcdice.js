@@ -60,8 +60,6 @@ function resetActiveHand() {
 }
 // displays a status overlay for 1s
 function updateStatus(message, flashing) {
-    // let status = document.getElementById("statusmsg") as HTMLInputElement;
-    // status.value = message;
     document.getElementById("statusmsg").textContent = message;
     let emphasize = null;
     if (flashing == true) {
@@ -305,7 +303,6 @@ function getSelectedScore() {
     for (let i = 0; i < 6; i++) {
         if (selectedDie[i] == true && bankedDie[i] == false) {
             selectedHand[i] = activeHand[i];
-            console.log("activeHand[i]", activeHand[i]);
         }
     }
     let dieCount = buildDieCount(selectedHand);
@@ -478,7 +475,6 @@ function computerPlay() {
         // this is an error state and shouldnt be reached
         else if (clickQueue.length == 0) {
             clearInterval(runClicks);
-            console.log("Error: still player's round and no clicks left");
             return;
         }
         // else there are clicks left
