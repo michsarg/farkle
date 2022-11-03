@@ -322,16 +322,14 @@ function updateScoreBoard() {
 // checks if a player has won and shows winScreen
 function winCheck() {
     if (p1Total >= winScore) {
-        let winTextElement = document.getElementById("winText") as HTMLInputElement;
-        winTextElement.value = "player 1 wins";
+        (document.getElementById("winText") as HTMLElement).textContent = "player 1 wins";
         $("#winScreen").show()
         $("#status, #rules").hide();
         $(".die, #playButtons").addClass("blurred deactivated");
         $("#p1name, #p2name").removeClass("simple-highlight");
         return true;
     } else if (p2Total >= winScore) {
-        let winTextElement = document.getElementById("winText") as HTMLInputElement;
-        winTextElement.value = "player 2 wins";
+        (document.getElementById("winText") as HTMLElement).textContent = "player 2 wins";
         $("#winScreen").show()
         $("#status, #rules").hide();
         $(".die, #playButtons").addClass("blurred deactivated");
