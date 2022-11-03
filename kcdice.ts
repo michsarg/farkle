@@ -422,7 +422,7 @@ function computerPlay() {
         return;
     }
     // queue of clicks to be played
-    let clickQueue:Array<number> = [];
+    let clickQueue:Array<HTMLElement> = [];
     // create array of playable/non-banked dice
     let playableHand = [];
     for (let i = 0; i < 6; i++) {
@@ -443,7 +443,7 @@ function computerPlay() {
                 if (playableHand[j] == (i + 1) && clickQueue.length <= 3) {
                     // queue a click for the die with the matching number
                     let diceJElement = dice[j] as HTMLInputElement;
-                    clickQueue.push(diceJElement.valueAsNumber);
+                    clickQueue.push(diceJElement);
                 }
             }
         }
@@ -455,7 +455,7 @@ function computerPlay() {
             for (let i = 0; i < 6; i++) {
                 if (playableHand[i] == 1) {
                     let diceIElement = dice[i] as HTMLInputElement;
-                    clickQueue.push(diceIElement.valueAsNumber);
+                    clickQueue.push(diceIElement);
                 }
             }
         }
@@ -464,13 +464,16 @@ function computerPlay() {
             for (let i = 0; i < 6; i++) {
                 if (playableHand[i] == 5) {
                     let diceIElement = dice[i] as HTMLInputElement;
-                    clickQueue.push(diceIElement.valueAsNumber);
+                    clickQueue.push(diceIElement);
                 }
             }
         }
     }
+
+    // add final click to scorePass to end turn
     let scorePassElement = document.getElementById('scorePass') as HTMLInputElement;
-    clickQueue.push(scorePassElement.valueAsNumber);
+    clickQueue.push(scorePassElement);
+
     let runClicks = setInterval(function() {
         // stop clicking if the turn is over
         if (turn != "p2") {
@@ -487,8 +490,7 @@ function computerPlay() {
         // else there are clicks left
         else if (clickQueue.length > 0) {
             // perform the next queued click
-            let selection = clickQueue.shift();
-            let element: HTMLElement = document.getElementById(String(selection)) as HTMLElement;
+            let element : HTMLElement = clickQueue.shift() as HTMLElement;
             element.click();
         }
     }, 1000);
@@ -557,7 +559,6 @@ $(() => {
 
     // bank score from selected die and roll again
     $("#scoreRoll").on('click', () => {
-        console.log("scoreRoll clicked");
         let dice = document.getElementsByClassName("die");
         for (let i = 0; i < 6; i++) {
             if (selectedDie[i] == true) {
@@ -617,9 +618,13 @@ $(() => {
 
     // select a die
     $(".die").on('click', function(e) {
-        console.log("die clicked");
-        let element = e.target.parentElement as HTMLElement;
-        console.log(e.target.parentElement)
+        let element = e.target as HTMLElement
+
+        // refers to parent if clicked element is not die
+        // requred due to player clicks being detected as child nodes
+        if (!e.target.classList.contains("die"))
+            { element = e.target.parentElement as HTMLElement;}
+
         // do nothing if die is banked
         if (element.classList.contains("banked")) { return }
         // update class of clicked die & presentation
