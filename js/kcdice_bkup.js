@@ -1,10 +1,10 @@
-"use strict";
 /**
  * Description
  * @authors mich0550@protonmail.com
  * @date    2021-06-25 09:33:06
  * @version 1.0.0
  */
+
 // VARIABLES
 let p1Total = 0;
 let p2Total = 0;
@@ -19,7 +19,9 @@ let turn = "none";
 let winScore = 2000;
 let gameMode = "none";
 let rotateAlt = 0;
+
 // FUNCTIONS
+
 // updates data structure with random values 
 // for non-selected and non-banked dice
 function roll() {
@@ -27,7 +29,7 @@ function roll() {
     let bustCheckHand = [];
     for (let i = 0; i < 6; i++) {
         if (selectedDie[i] == false && bankedDie[i] == false) {
-            activeHand[i] = getDie();
+            activeHand[i] = getDie(i);
             bustCheckHand.push(activeHand[i]);
         }
     }
@@ -36,14 +38,14 @@ function roll() {
     if (bustCheckHand.length > 0) {
         // continues handling of turn in bustCheck function
         bustCheck(bustCheckHand);
-    }
-    else {
+    } else {
         updateStatus("Play again!", false);
-        setTimeout(function () {
+        setTimeout(function() {
             resetActiveHand();
         }, 1500);
     }
 }
+
 // resets data structures and visual representations
 function resetActiveHand() {
     let dice = document.getElementsByClassName("die");
@@ -58,33 +60,32 @@ function resetActiveHand() {
     }
     roll();
 }
+
 // displays a status overlay for 1s
 function updateStatus(message, flashing) {
-    let status = document.getElementById("statusmsg");
-    status.value = message;
-    let emphasize = null;
+    document.getElementById("statusmsg").innerHTML = message;
+    var emphasize = null;
     if (flashing == true) {
         let count = 0;
-        emphasize = setInterval(function () {
+        emphasize = setInterval(function() {
             if (count % 2 == 0) {
-                $("#statusmsg").css("text-shadow", "0px 0px 5px khaki");
-            }
-            else {
-                $("#statusmsg").css("text-shadow", "0px 0px");
+                $("#statusmsg").css("text-shadow", "0px 0px 5px khaki")
+            } else {
+                $("#statusmsg").css("text-shadow", "0px 0px")
             }
             count += 1;
         }, 200);
         emphasize;
-    }
-    else {
+    } else {
         $("#statusmsg").css("text-shadow", "0px 0px");
     }
     $("#status").show();
-    setTimeout(function () {
+    setTimeout(function() {
         clearInterval(emphasize);
-        $("#status").hide();
+        $("#status").hide()
     }, 1000);
 }
+
 // checks passed hand for bust condition
 // and updates game status
 function bustCheck(bustCheckHand) {
@@ -94,47 +95,43 @@ function bustCheck(bustCheckHand) {
         if (turn == "p1") {
             p1Round = 0;
             p1Selected = 0;
-        }
-        else {
+        } else {
             p2Round = 0;
             p2Selected = 0;
         }
         updateScoreBoard();
         if (!winCheck()) {
-            setTimeout(function () {
+            setTimeout(function() {
                 resetActiveHand();
                 progressTurn();
             }, 1000);
         }
     }
 }
+
+
 //
 function rotateDie() {
-    let dice = document.getElementsByClassName("die");
+    dice = document.getElementsByClassName("die");
     for (let i = 0; i < 6; i++) {
         if (dice[i].classList.contains("notSelected")) {
-            if (!(gameMode == "pvc" && turn == "p2")) {
-                $(dice[i]).addClass("deactivated");
-            }
-            let distance = Math.round((Math.random() * 1000 % 75));
-            let angle = Math.round((Math.random() * 1000 % 180));
-            if (i % (rotateAlt % 2) == 0) {
-                distance += 75;
-            }
+            if (!(gameMode == "pvc" && turn == "p2")) { $(dice[i]).addClass("deactivated"); }
+            distance = Math.round((Math.random() * 1000 % 75));
+            angle = Math.round((Math.random() * 1000 % 180));
+            if (i % (rotateAlt % 2) == 0) { distance += 75; }
             rotateAlt++;
             $(dice[i]).css("transform", "translate(0px, " + distance + "px) rotate(" + angle + "deg)");
-            if (!(gameMode == "pvc" && turn == "p2")) {
-                $(dice[i]).removeClass("deactivated");
-            }
+            if (!(gameMode == "pvc" && turn == "p2")) { $(dice[i]).removeClass("deactivated"); }
         }
     }
 }
+
 // visually updates webpage with data structure values for dice and scores
 function updateView() {
     let dice = document.getElementsByClassName("die");
     for (let i = 0; i < dice.length; i++) {
         while (dice[i].firstChild) {
-            dice[i].removeChild(dice[i].firstChild);
+            dice[i].removeChild(dice[i].firstChild)
         }
         let square = document.createElement("i");
         $(square).addClass("fas fa-square fa-stack-1x");
@@ -170,16 +167,16 @@ function updateView() {
         dice[i].appendChild(circle);
     }
     updateScoreBoard();
-}
-;
+};
+
 // Returns a random value between 1 and 6
 function getDie() {
     let numb = Math.random();
     let rand = (numb * 10) % 5;
     rand = Math.round(rand) + 1;
     return rand;
-}
-;
+};
+
 // returns array of sums of each dice number
 // used to detect scoring combos
 function buildDieCount(passedHand) {
@@ -196,6 +193,7 @@ function buildDieCount(passedHand) {
     }
     return dieCount;
 }
+
 // Returns score of the dieCount array passed to it
 // disable check disables roll option on non-scoring hand
 function getScore(dieCount, disableCheck) {
@@ -214,30 +212,27 @@ function getScore(dieCount, disableCheck) {
     for (let i = 0; i < 5; i++) {
         if (dieCount[i] != 1) {
             break;
-        }
-        ;
+        };
         if (i == 4) {
             for (let i = 0; i < 5; i++) {
                 dieCount[i] -= 1;
             }
             score += 500;
-        }
-        ;
+        };
     }
     // partial straight 2-6
     for (let i = 1; i < 6; i++) {
         if (dieCount[i] != 1) {
             break;
-        }
-        ;
+        };
         if (i == 5) {
             for (let i = 1; i < 6; i++) {
                 dieCount[i] -= 1;
             }
-            score += 750;
-        }
-        ;
+            score += 750
+        };
     }
+
     // remaining combinations
     for (let i = 0; i < dieCount.length; i++) {
         // more than three of a kind
@@ -275,11 +270,10 @@ function getScore(dieCount, disableCheck) {
         }
     }
     // dieCount now only contains non-scoring die
-    if (disableCheck == true) {
-        disableRollOnNonScore(dieCount);
-    }
+    if (disableCheck == true) { disableRollOnNonScore(dieCount); }
     return score;
 }
+
 // Disable rolls if non-scoring die are selected
 function disableRollOnNonScore(dieCount) {
     let nonScoreDie = 0;
@@ -291,62 +285,54 @@ function disableRollOnNonScore(dieCount) {
     if (nonScoreDie > 0) {
         $("#scoreRoll").addClass("disabled");
         $("#scorePass").addClass("disabled");
-    }
-    else {
+    } else {
         $("#scoreRoll").removeClass("disabled");
         $("#scorePass").removeClass("disabled");
     }
 }
+
 // returns score of selected die only
 function getSelectedScore() {
-    let selectedHand = [];
+    selectedHand = [];
     // get only selected values
     for (let i = 0; i < 6; i++) {
         if (selectedDie[i] == true && bankedDie[i] == false) {
             selectedHand[i] = activeHand[i];
         }
     }
-    let dieCount = buildDieCount(selectedHand);
+    dieCount = buildDieCount(selectedHand);
     return getScore(dieCount, true);
 }
+
 // updates webpage with score values
 function updateScoreBoard() {
-    let p1TotalElement = document.getElementById("p1Total");
-    p1TotalElement.valueAsNumber = p1Total;
-    let p1RoundElement = document.getElementById("p1Round");
-    p1RoundElement.valueAsNumber = p1Round;
-    let p1SelectedElement = document.getElementById("p1Selected");
-    p1SelectedElement.valueAsNumber = p1Selected;
-    let p2TotalElement = document.getElementById("p2Total");
-    p2TotalElement.valueAsNumber = p2Total;
-    let p2RoundElement = document.getElementById("p2Round");
-    p2RoundElement.valueAsNumber = p2Round;
-    let p2SelectedElement = document.getElementById("p2Selected");
-    p2SelectedElement.valueAsNumber = p2Selected;
+    document.getElementById("p1Total").innerHTML = p1Total;
+    document.getElementById("p1Round").innerHTML = p1Round;
+    document.getElementById("p1Selected").innerHTML = p1Selected;
+    document.getElementById("p2Total").innerHTML = p2Total;
+    document.getElementById("p2Round").innerHTML = p2Round;
+    document.getElementById("p2Selected").innerHTML = p2Selected;
 }
+
 // checks if a player has won and shows winScreen
 function winCheck() {
     if (p1Total >= winScore) {
-        let winTextElement = document.getElementById("winText");
-        winTextElement.value = "player 1 wins";
-        $("#winScreen").show();
+        document.getElementById("winText").innerHTML = "player 1 wins";
+        $("#winScreen").show()
         $("#status, #rules").hide();
         $(".die, #playButtons").addClass("blurred deactivated");
         $("#p1name, #p2name").removeClass("simple-highlight");
         return true;
-    }
-    else if (p2Total >= winScore) {
-        let winTextElement = document.getElementById("winText");
-        winTextElement.value = "player 2 wins";
-        $("#winScreen").show();
+    } else if (p2Total >= winScore) {
+        document.getElementById("winText").innerHTML = "player 2 wins";
+        $("#winScreen").show()
         $("#status, #rules").hide();
         $(".die, #playButtons").addClass("blurred deactivated");
         $("#p1name, #p2name").removeClass("simple-highlight");
         return true;
-    }
-    else
-        return false;
+    } else return false;
 }
+
 // resets game variables to start state
 function resetToStart() {
     p1Total = 0;
@@ -361,14 +347,13 @@ function resetToStart() {
     turn = "none";
     gameMode = "none";
     rotateAlt = 0;
-    let titleScreenElement = document.getElementById("titleScreen");
-    titleScreenElement.style.display = "block";
-    let boardContainerElement = document.getElementById("boardContainer");
-    boardContainerElement.style.display = "block";
+    document.getElementById("titleScreen").style.display = "block";
+    document.getElementById("boardContainer").style.display = "block";
     $(".die").hide();
     $("#status").hide();
     roll();
 }
+
 // passes turn between players and updates webpage with this
 function progressTurn() {
     if (turn == "p1") {
@@ -380,8 +365,7 @@ function progressTurn() {
             //disable dick click on p2 play pvc
             $(".die").addClass("deactivated");
         }
-    }
-    else {
+    } else {
         turn = "p1";
         updateStatus("Player 1", false);
         $("#p1name").addClass("simple-highlight");
@@ -392,30 +376,29 @@ function progressTurn() {
         }
     }
     resetActiveHand();
-    if (gameMode == "pvc" && turn == "p2") {
-        computerPlay();
-    }
+    if (gameMode == "pvc" && turn == "p2") { computerPlay(); }
 }
+
 // begin a game by showing board and alerting first player
 function startGame(selectedMode) {
-    let titleScreenElement = document.getElementById("titleScreen");
-    titleScreenElement.style.display = "none";
+    document.getElementById("titleScreen").style.display = "none";
     gameMode = selectedMode;
     //start the game
-    setTimeout(function () { updateStatus("Lets Play!", false); }, 0);
-    setTimeout(function () { progressTurn(); }, 1500);
-    setTimeout(function () {
+    setTimeout(function() { updateStatus("Lets Play!", false); }, 0);
+    setTimeout(function() { progressTurn(); }, 1500);
+    setTimeout(function() {
         $("#playableBoard").show();
         $("#menuStatus").show();
         $("#quitScreen").hide();
         $("#titleScreen").hide();
     }, 0);
-    setTimeout(function () { $(".die").show(); }, 1000);
+    setTimeout(function() { $(".die").show(); }, 1000);
 }
+
 // plays one simple scoring move for the computer player
 function computerPlay() {
     // exit function if bust roll is made
-    if (0 == getScore(buildDieCount(activeHand), false)) {
+    if (0 == getScore(buildDieCount(activeHand, false))) {
         return;
     }
     // queue of clicks to be played
@@ -425,10 +408,7 @@ function computerPlay() {
     for (let i = 0; i < 6; i++) {
         if (bankedDie[i] == false) {
             playableHand[i] = activeHand[i];
-        }
-        else {
-            playableHand[i] = -1;
-        }
+        } else { playableHand[i] = -1; }
     }
     let dieCount = buildDieCount(playableHand);
     let dice = document.getElementsByClassName("die");
@@ -442,8 +422,7 @@ function computerPlay() {
                 // this will select the first three, but cant do double triples
                 if (playableHand[j] == (i + 1) && clickQueue.length <= 3) {
                     // queue a click for the die with the matching number
-                    let diceJElement = dice[j];
-                    clickQueue.push(diceJElement.valueAsNumber);
+                    clickQueue.push($(dice[j]));
                 }
             }
         }
@@ -454,8 +433,7 @@ function computerPlay() {
         if (dieCount[0] > 0) {
             for (let i = 0; i < 6; i++) {
                 if (playableHand[i] == 1) {
-                    let diceIElement = dice[i];
-                    clickQueue.push(diceIElement.valueAsNumber);
+                    clickQueue.push(dice[i]);
                 }
             }
         }
@@ -463,91 +441,99 @@ function computerPlay() {
         if (dieCount[4] > 0) {
             for (let i = 0; i < 6; i++) {
                 if (playableHand[i] == 5) {
-                    let diceIElement = dice[i];
-                    clickQueue.push(diceIElement.valueAsNumber);
+                    clickQueue.push(dice[i]);
                 }
             }
         }
     }
-    let scorePassElement = document.getElementById('scorePass');
-    clickQueue.push(scorePassElement.valueAsNumber);
-    let runClicks = setInterval(function () {
+    clickQueue.push($('#scorePass'));
+    let runClicks = setInterval(function() {
         // stop clicking if the turn is over
         if (turn != "p2") {
+            runClicks = [];
             clearInterval(runClicks);
-            return;
+            return
         }
         // if its still the players round and no clicks left, 
         // this is an error state and shouldnt be reached
         else if (clickQueue.length == 0) {
             clearInterval(runClicks);
-            console.log("Error: still player's round and no clicks left");
-            return;
+            runClicks = [];
+            return
         }
         // else there are clicks left
         else if (clickQueue.length > 0) {
             // perform the next queued click
             let selection = clickQueue.shift();
-            let element = document.getElementById(String(selection));
-            element.click();
+            selection.click();
         }
     }, 1000);
     if (turn == "p2") {
         runClicks;
     }
-    return;
+    return
 }
+
 // run game
-$(() => {
+$(document).ready(function() {
+
     $("#titleScreen").show();
     $("#playableBoard").hide();
     $("#menuStatus").hide();
-    $("#status, #rules").hide();
+    $("#status, #rules").hide()
+
     resetToStart();
+
     //title screen start buttons
-    $("#pvc").on('click', () => { startGame("pvc"); });
-    $("#pvp").on('click', () => { startGame("pvp"); });
+    $("#pvc").click(function() { startGame("pvc") });
+    $("#pvp").click(function() { startGame("pvp") });
+
     // quit button
-    $("#quit").on('click', () => {
+    $("#quit").click(function() {
         $("#playableBoard").hide();
         $("#menuStatus").hide();
-        $("#status, #rules").hide();
-        $("#winScreen").hide();
+        $("#status, #rules").hide()
+        $("#winScreen").hide()
         $("#quitScreen").show();
     });
-    $("#chooseQuit").on('click', () => {
+
+    $("#chooseQuit").click(function() {
         $("#quitScreen").hide();
         resetToStart();
     });
-    $("#chooseResume").on('click', () => {
+
+    $("#chooseResume").click(function() {
         $("#quitScreen").hide();
         $("#playableBoard").show();
         $("#menuStatus").show();
     });
-    $("#returnMenu").on('click', () => {
+
+    $("#returnMenu").click(function() {
         $("#winScreen").hide();
         $("#playableBoard").hide();
         $("#menuStatus").hide();
         $(".die, #playButtons").removeClass("blurred deactivated");
         resetToStart();
-    });
-    $("#hideRules").on('click', () => {
+    })
+
+    $("#hideRules").click(function() {
         $("#rules").hide();
         $("#playableBoard").show();
         $("#menuStatus").show();
     });
-    $("#help").on('click', () => {
+
+    $("#help").click(function() {
         $("#playableBoard").hide();
         $("#menuStatus").hide();
-        $("#status").hide();
-        $("#winScreen").hide();
+        $("#status").hide()
+        $("#winScreen").hide()
         $("#titleScreen").hide();
         $("#rules").show();
     });
+
     // bank score from selected die and roll again
-    $("#scoreRoll").on('click', () => {
-        console.log("scoreRoll clicked");
-        let dice = document.getElementsByClassName("die");
+    $("#scoreRoll").click(function() {
+        dice = document.getElementsByClassName("die");
         for (let i = 0; i < 6; i++) {
             if (selectedDie[i] == true) {
                 bankedDie[i] = true;
@@ -561,8 +547,7 @@ $(() => {
         if (turn == "p1") {
             p1Round += p1Selected;
             p1Selected = 0;
-        }
-        else {
+        } else {
             p2Round += p2Selected;
             p2Selected = 0;
         }
@@ -571,9 +556,10 @@ $(() => {
         // call to reroll unselected die
         roll();
     });
+
     // bank score from selected die and pass turn
-    $("#scorePass").on('click', () => {
-        let dice = document.getElementsByClassName("die");
+    $("#scorePass").click(function() {
+        dice = document.getElementsByClassName("die");
         for (let i = 0; i < 6; i++) {
             if (selectedDie[i] == true) {
                 bankedDie[i] = true;
@@ -588,8 +574,7 @@ $(() => {
             updateStatus((p1Round + p1Selected) + " points", true);
             p1Round = 0;
             p1Selected = 0;
-        }
-        else {
+        } else {
             p2Total += p2Round;
             p2Total += p2Selected;
             updateStatus((p2Round + p2Selected) + " points", true);
@@ -598,26 +583,22 @@ $(() => {
         }
         updateScoreBoard();
         if (!winCheck()) {
-            setTimeout(function () {
+            setTimeout(function() {
                 progressTurn();
             }, 1000);
         }
     });
+
     // select a die
-    $(".die").on('click', function (e) {
-        console.log("die clicked");
-        let element = e.target.parentElement;
-        console.log(e.target.parentElement);
+    $(".die").click(function() {
         // do nothing if die is banked
-        if (element.classList.contains("banked")) {
-            return;
-        }
+        if ((this).classList.contains("banked")) { return }
         // update class of clicked die & presentation
-        $(element).toggleClass("selected notSelected");
-        $(element.childNodes[2]).toggle(); // apply circle selected
+        $((this)).toggleClass("selected notSelected");
+        $((this).childNodes[2]).toggle(); // apply circle selected
         // update data structure of clicked die
-        let dice = Array.from(document.getElementsByClassName("die"));
-        let pos = jQuery.inArray(element, dice);
+        let dice = document.getElementsByClassName("die");
+        let pos = jQuery.inArray((this), dice);
         selectedDie[pos] = !selectedDie[pos];
         //update selected menu value
         turn == "p1" ? p1Selected = getSelectedScore() : p2Selected = getSelectedScore();
