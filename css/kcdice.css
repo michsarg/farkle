@@ -115,6 +115,10 @@
         z-index: 1;
     }
     
+    #board .row {
+        padding-right: 0px;
+    }
+
     .spacer {
         padding-left: 10px;
         padding-right: 10px;
